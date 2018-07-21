@@ -8,22 +8,40 @@
 
 /* Begin PBXBuildFile section */
 		6816F5CD20FD56E900C6886B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6816F5CC20FD56E900C6886B /* AppDelegate.swift */; };
-		6816F5CF20FD56E900C6886B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6816F5CE20FD56E900C6886B /* ViewController.swift */; };
-		6816F5D220FD56E900C6886B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6816F5D020FD56E900C6886B /* Main.storyboard */; };
+		6816F5CF20FD56E900C6886B /* ListTableViewCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6816F5CE20FD56E900C6886B /* ListTableViewCellController.swift */; };
 		6816F5D520FD56E900C6886B /* Beta_List_6.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6816F5D320FD56E900C6886B /* Beta_List_6.xcdatamodeld */; };
 		6816F5D720FD56EA00C6886B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6816F5D620FD56EA00C6886B /* Assets.xcassets */; };
 		6816F5DA20FD56EA00C6886B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6816F5D820FD56EA00C6886B /* LaunchScreen.storyboard */; };
+		6816F5E320FE2F8600C6886B /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6816F5E220FE2F8600C6886B /* DetailViewController.swift */; };
+		6816F5E520FE426F00C6886B /* BetaTrendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6816F5E420FE426F00C6886B /* BetaTrendViewController.swift */; };
+		6816F5E720FE7E4100C6886B /* AddPatientViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6816F5E620FE7E4000C6886B /* AddPatientViewController.swift */; };
+		68809D79210108F600260113 /* DatabaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68809D78210108F600260113 /* DatabaseController.swift */; };
+		68809D80210111AA00260113 /* Patient+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68809D7A210111AA00260113 /* Patient+CoreDataClass.swift */; };
+		68809D81210111AA00260113 /* Patient+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68809D7B210111AA00260113 /* Patient+CoreDataProperties.swift */; };
+		68809D82210111AA00260113 /* Hcg+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68809D7C210111AA00260113 /* Hcg+CoreDataClass.swift */; };
+		68809D83210111AA00260113 /* Hcg+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68809D7D210111AA00260113 /* Hcg+CoreDataProperties.swift */; };
+		68809D84210111AA00260113 /* Ultrasound+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68809D7E210111AA00260113 /* Ultrasound+CoreDataClass.swift */; };
+		68809D85210111AA00260113 /* Ultrasound+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68809D7F210111AA00260113 /* Ultrasound+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		6816F5C920FD56E900C6886B /* Beta_List_6.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Beta_List_6.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6816F5CC20FD56E900C6886B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		6816F5CE20FD56E900C6886B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		6816F5D120FD56E900C6886B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		6816F5CE20FD56E900C6886B /* ListTableViewCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewCellController.swift; sourceTree = "<group>"; };
 		6816F5D420FD56E900C6886B /* Beta_List_6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Beta_List_6.xcdatamodel; sourceTree = "<group>"; };
 		6816F5D620FD56EA00C6886B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6816F5D920FD56EA00C6886B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6816F5DB20FD56EA00C6886B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6816F5E220FE2F8600C6886B /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		6816F5E420FE426F00C6886B /* BetaTrendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BetaTrendViewController.swift; sourceTree = "<group>"; };
+		6816F5E620FE7E4000C6886B /* AddPatientViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPatientViewController.swift; sourceTree = "<group>"; };
+		68809D78210108F600260113 /* DatabaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseController.swift; sourceTree = "<group>"; };
+		68809D7A210111AA00260113 /* Patient+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Patient+CoreDataClass.swift"; sourceTree = "<group>"; };
+		68809D7B210111AA00260113 /* Patient+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Patient+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		68809D7C210111AA00260113 /* Hcg+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Hcg+CoreDataClass.swift"; sourceTree = "<group>"; };
+		68809D7D210111AA00260113 /* Hcg+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Hcg+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		68809D7E210111AA00260113 /* Ultrasound+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ultrasound+CoreDataClass.swift"; sourceTree = "<group>"; };
+		68809D7F210111AA00260113 /* Ultrasound+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ultrasound+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,6 +58,12 @@
 		6816F5C020FD56E900C6886B = {
 			isa = PBXGroup;
 			children = (
+				68809D7A210111AA00260113 /* Patient+CoreDataClass.swift */,
+				68809D7B210111AA00260113 /* Patient+CoreDataProperties.swift */,
+				68809D7C210111AA00260113 /* Hcg+CoreDataClass.swift */,
+				68809D7D210111AA00260113 /* Hcg+CoreDataProperties.swift */,
+				68809D7E210111AA00260113 /* Ultrasound+CoreDataClass.swift */,
+				68809D7F210111AA00260113 /* Ultrasound+CoreDataProperties.swift */,
 				6816F5CB20FD56E900C6886B /* Beta_List_6 */,
 				6816F5CA20FD56E900C6886B /* Products */,
 			);
@@ -57,14 +81,25 @@
 			isa = PBXGroup;
 			children = (
 				6816F5CC20FD56E900C6886B /* AppDelegate.swift */,
-				6816F5CE20FD56E900C6886B /* ViewController.swift */,
-				6816F5D020FD56E900C6886B /* Main.storyboard */,
+				6816F5E120FE2F0800C6886B /* Controllers */,
 				6816F5D620FD56EA00C6886B /* Assets.xcassets */,
 				6816F5D820FD56EA00C6886B /* LaunchScreen.storyboard */,
 				6816F5DB20FD56EA00C6886B /* Info.plist */,
 				6816F5D320FD56E900C6886B /* Beta_List_6.xcdatamodeld */,
 			);
 			path = Beta_List_6;
+			sourceTree = "<group>";
+		};
+		6816F5E120FE2F0800C6886B /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				6816F5CE20FD56E900C6886B /* ListTableViewCellController.swift */,
+				6816F5E220FE2F8600C6886B /* DetailViewController.swift */,
+				6816F5E420FE426F00C6886B /* BetaTrendViewController.swift */,
+				6816F5E620FE7E4000C6886B /* AddPatientViewController.swift */,
+				68809D78210108F600260113 /* DatabaseController.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -127,7 +162,6 @@
 			files = (
 				6816F5DA20FD56EA00C6886B /* LaunchScreen.storyboard in Resources */,
 				6816F5D720FD56EA00C6886B /* Assets.xcassets in Resources */,
-				6816F5D220FD56E900C6886B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,23 +172,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6816F5CF20FD56E900C6886B /* ViewController.swift in Sources */,
+				68809D82210111AA00260113 /* Hcg+CoreDataClass.swift in Sources */,
+				6816F5E720FE7E4100C6886B /* AddPatientViewController.swift in Sources */,
+				6816F5CF20FD56E900C6886B /* ListTableViewCellController.swift in Sources */,
+				68809D83210111AA00260113 /* Hcg+CoreDataProperties.swift in Sources */,
 				6816F5D520FD56E900C6886B /* Beta_List_6.xcdatamodeld in Sources */,
+				68809D79210108F600260113 /* DatabaseController.swift in Sources */,
 				6816F5CD20FD56E900C6886B /* AppDelegate.swift in Sources */,
+				68809D81210111AA00260113 /* Patient+CoreDataProperties.swift in Sources */,
+				6816F5E520FE426F00C6886B /* BetaTrendViewController.swift in Sources */,
+				68809D85210111AA00260113 /* Ultrasound+CoreDataProperties.swift in Sources */,
+				68809D84210111AA00260113 /* Ultrasound+CoreDataClass.swift in Sources */,
+				68809D80210111AA00260113 /* Patient+CoreDataClass.swift in Sources */,
+				6816F5E320FE2F8600C6886B /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		6816F5D020FD56E900C6886B /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6816F5D120FD56E900C6886B /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		6816F5D820FD56EA00C6886B /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
