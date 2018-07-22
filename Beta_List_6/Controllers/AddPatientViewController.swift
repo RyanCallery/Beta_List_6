@@ -43,10 +43,14 @@ class AddPatientViewController: UITableViewController {
         
         navigationController?.navigationBar.isTranslucent = false
         
-        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tableView.addGestureRecognizer(tapGesture)
        
         
       
+    }
+    @objc func hideKeyboard() {
+        tableView.endEditing(true)
     }
     
     @objc func savePatient() {
@@ -158,6 +162,8 @@ class AddPatientViewController: UITableViewController {
         patient?.historyOfPresentIllness = patientInfo
        
     }
+
+    
 }
 extension AddPatientViewController: UITextFieldDelegate{
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -269,6 +275,7 @@ class AgeCell: BaseTableViewCell{
     let ageTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Age"
+        textField.keyboardType = .numberPad
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -291,6 +298,7 @@ class ParityCell: BaseTableViewCell{
     let parityTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Parity"
+        textField.keyboardType = .numberPad
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -311,6 +319,7 @@ class GestationalAgeCell: BaseTableViewCell{
     let gestationalAgeTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Gestational Age"
+        textField.keyboardType = .numberPad 
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()

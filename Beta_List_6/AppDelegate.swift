@@ -17,12 +17,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
-        
+        application.statusBarStyle = .lightContent
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible() 
         
         window?.rootViewController = UINavigationController(rootViewController: ListTableViewCellController())
         return true
+        
+        
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

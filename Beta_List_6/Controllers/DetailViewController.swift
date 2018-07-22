@@ -13,11 +13,15 @@ let betaID = "betaID"
 let sonoID = "sonoID "
 let betaHeaderID = "betaHeaderID"
 
+
+
 class DetailViewController: UIViewController, UICollectionViewDelegateFlowLayout {
     
     
     var managedContext: NSManagedObjectContext! = nil
     var patient: Patient? = nil {didSet {
+        print("this is \(patient?.hcg) and \(patient?.ultrasound) ")
+        
         }
     }
     
@@ -44,7 +48,7 @@ class DetailViewController: UIViewController, UICollectionViewDelegateFlowLayout
         return collectionView
     }()
     
-    let firstNameLabel: UILabel = {
+    var firstNameLabel: UILabel = {
        let label = UILabel()
         label.text = "First Name"
         label.backgroundColor = .red
@@ -96,28 +100,24 @@ class DetailViewController: UIViewController, UICollectionViewDelegateFlowLayout
     
     let hpiTextview: UITextView = {
         let textView = UITextView()
+        textView.isEditable = false
         textView.text = "HPI"
         return textView
     }()
     
-    let addHCG: UIBarButtonItem = {
-       let button = UIBarButtonItem()
-        button.title = "Add β"
-        button.style = .plain
-        button.target = self as AnyObject
-        button.action = #selector(addBeta)
-        return button
-    }()
-    
-    let addSono: UIBarButtonItem = {
-       let button = UIBarButtonItem()
-        button.image = #imageLiteral(resourceName: "UltrasoundBlack 17-31-58-107")
-        return button
-    }()
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        firstNameLabel.text = patient?.firstName != nil ? patient?.firstName : ""
+        lastNameLabel.text = patient?.lastName != nil ? patient?.lastName : ""
+        mrnLabel.text = patient?.medicalRecordNumber != nil ? patient?.medicalRecordNumber : ""
+        telephoneNumberLabel.text = patient?.telephoneNumber != nil ? patient?.telephoneNumber : ""
+        ageLabel.text = patient?.age != nil ? "\(patient?.age ?? "") yo" : ""
+        parityLabel.text = patient?.parity != nil ? "P\(patient?.parity ?? "")" : ""
+        gALabel.text = patient?.gestationalAge != nil ? patient?.gestationalAge : ""
+        hpiTextview.text = patient?.historyOfPresentIllness != nil ? patient?.historyOfPresentIllness : ""
         
         view.backgroundColor = .white
         
@@ -126,23 +126,121 @@ class DetailViewController: UIViewController, UICollectionViewDelegateFlowLayout
         sonoCollectionView.delegate = self
         sonoCollectionView.dataSource = self
         
-        navigationItem.rightBarButtonItem = addHCG
+        setupNavigationBarItems()
        
-        
-        
-        
-        
         betaCollectionView.register(BetaCollectionViewCell.self, forCellWithReuseIdentifier: betaID)
         sonoCollectionView.register(SonoCollectionViewCell.self, forCellWithReuseIdentifier: sonoID)
         
         setupStack()
-
+    }
+    
+    private func setupNavigationBarItems(){
         
+        
+        
+        let ultrasoundButton = UIButton(type: .roundedRect)
+        ultrasoundButton.imageView?.contentMode = .scaleAspectFit
+       ultrasoundButton.setImage(#imageLiteral(resourceName: "UltrasoundBlack") .withRenderingMode(.alwaysOriginal),for: .normal)
+        ultrasoundButton.frame = CGRect(x: 0, y: 0, width: 22, height: 22)
+        ultrasoundButton.addTarget(self, action: #selector(addUltrasound), for: .touchUpInside)
+        
+        let addHcgButton = UIButton(type: .system)
+        addHcgButton.setTitle("Add β", for: .normal)
+        addHcgButton.frame = CGRect(x: 0, y: 0, width: 22, height: 22)
+        addHcgButton.addTarget(self, action: #selector(addBeta), for: .touchUpInside)
+        
+        navigationItem.rightBarButtonItems = [UIBarButtonItem(customView: addHcgButton), UIBarButtonItem(customView: ultrasoundButton)]
     }
     
     @objc func addBeta() {
         print("beta hcg added")
+        let alert = UIAlertController(title: "Add New Beta", message: nil, preferredStyle: .alert)
+        alert.addTextField(configurationHandler: {(textField) in
+            textField.placeholder = "HCG"
+        })
+        let saveAction = UIAlertAction(title: "Save", style: .default, handler: {(action) in
+            print("Saved beta")
+            
+            if let hcgText = alert.textFields?.first?.text {
+                let date = Date()
+                let hcg = Hcg(context: self.managedContext)
+                hcg.hcgLevel = hcgText
+                hcg.date = date as NSDate
+                self.patient?.addToHcg(hcg)
+                do {
+                    try self.managedContext.save()
+                    self.betaCollectionView.reloadData()
+                    
+                } catch {
+                    fatalError("Unable to save HCG value")
+                }
+                
+            } else {
+                return
+            }
+        })
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {(action) in
+            print("Cancel beta")
+        })
+        alert.addAction(saveAction)
+        alert.addAction(cancelAction)
+        present(alert, animated: true, completion: nil)
     }
+    @objc func addUltrasound(){
+        let alert = UIAlertController(title: "Add Ultrasound", message: nil, preferredStyle: .alert)
+        alert.addTextField(configurationHandler: {(textField) in
+            textField.placeholder = "Uterus"
+        })
+        alert.addTextField(configurationHandler: {(textField) in
+            textField.placeholder = "Left Ovary"
+        })
+        alert.addTextField(configurationHandler: {(textField) in
+            textField.placeholder = "Right Ovary"
+        })
+        alert.addTextField(configurationHandler: {(textField) in
+            textField.placeholder = "Free fluid"
+        })
+        let saveAction = UIAlertAction(title: "Save", style: .default, handler: {(action) in
+            print("Saved ultrasound")
+            let ultrasound = Ultrasound(context: self.managedContext)
+            let date = Date()
+            if let uterusText = alert.textFields?.first?.text {
+                ultrasound.uterus = uterusText
+                ultrasound.date = date as NSDate
+            }
+            if let leftOvaryText = alert.textFields![1].text {
+                ultrasound.leftOvary = leftOvaryText
+                ultrasound.date = date as NSDate
+            }
+            if let rightOvaryText = alert.textFields![2].text {
+            ultrasound.rightOvary = rightOvaryText
+                ultrasound.date = date as NSDate
+            }
+            if let fluidText = alert.textFields![3].text {
+            ultrasound.fluid = fluidText
+                ultrasound.date = date as NSDate
+            }
+            do {
+                self.patient?.addToUltrasound(ultrasound)
+                try self.managedContext.save()
+                self.sonoCollectionView.reloadData()
+                
+            }
+            catch {
+            fatalError("Unable to save ultrasound value")
+            }
+                
+        })
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {(action) in
+            print("Cancel sono")
+        })
+        alert.addAction(saveAction)
+        alert.addAction(cancelAction)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    
     func setupStack() {
         let nameStack = UIStackView(arrangedSubviews: [firstNameLabel, lastNameLabel])
         nameStack.translatesAutoresizingMaskIntoConstraints = false
@@ -174,7 +272,8 @@ class DetailViewController: UIViewController, UICollectionViewDelegateFlowLayout
             button.translatesAutoresizingMaskIntoConstraints = false
             button.setTitle("β", for: .normal)
             button.backgroundColor = .red
-            button.layer.cornerRadius = 15 
+            button.layer.cornerRadius = 15
+            button.layer.masksToBounds = true 
             return button
         }()
         
@@ -232,26 +331,39 @@ class DetailViewController: UIViewController, UICollectionViewDelegateFlowLayout
 extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == self.betaCollectionView {
-        return 5
+            return (patient?.hcg!.count)!
         } else {
-            return 5
+            return (patient?.ultrasound!.count)!
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == betaCollectionView {
         let betaCell = collectionView.dequeueReusableCell(withReuseIdentifier: betaID, for: indexPath) as! BetaCollectionViewCell
-        return betaCell
+            let betaObject = patient?.hcg?.object(at: indexPath.item) as! Hcg
+            let dateFormatter = DateFormatter()
+            let timeFormatter = DateFormatter()
+            dateFormatter.dateFormat = "M.d"
+            timeFormatter.dateFormat = "h:mm a"
+            betaCell.betaLabel.text = betaObject.hcgLevel
+            betaCell.dateLabel.text = dateFormatter.string(from: betaObject.date! as Date)
+            betaCell.timeLabel.text = timeFormatter.string(from: betaObject.date! as Date)
+
+            return betaCell
         } else {
             let sonoCell = collectionView.dequeueReusableCell(withReuseIdentifier: sonoID, for: indexPath) as! SonoCollectionViewCell
+            let sonoObject = patient?.ultrasound?.object(at: indexPath.item) as! Ultrasound
+            let formatter = DateFormatter()
+            formatter.dateFormat = "M.d.yy h:mm a"
+            sonoCell.dateLabel.text = formatter.string(from: sonoObject.date! as Date)
+            sonoCell.uterusTextView.text = sonoObject.uterus
+            sonoCell.leftOvaryTextView.text = sonoObject.leftOvary
+            sonoCell.rightOvaryTextView.text = sonoObject.rightOvary
+            sonoCell.fluidTextView.text = sonoObject.fluid
             return sonoCell
         }
     }
     
-
-    
-
-
 class BetaCollectionViewCell: BaseCollectionViewCell {
     
     
@@ -259,20 +371,14 @@ class BetaCollectionViewCell: BaseCollectionViewCell {
     
     let dateLabel: UILabel = {
        let label = UILabel()
-        let date = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "M.d"
-        label.text = formatter.string(from: date)
+        label.text = "Date"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     let timeLabel: UILabel = {
        let label = UILabel()
-        let date = Date()
-        var formatter = DateFormatter()
-        formatter.dateFormat = "h:mm a"
-        label.text = formatter.string(from: date)
+        label.text = "Time"
         label.font = label.font.withSize(12)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -325,8 +431,8 @@ class BetaCollectionViewCell: BaseCollectionViewCell {
 }
 
 class SonoCollectionViewCell: BaseCollectionViewCell, UITextViewDelegate {
-    let date = Date()
-    let formatter = DateFormatter()
+//    var date = Date()
+//    let formatter = DateFormatter()
     
     let ultrasoundFindingsLabel: UILabel = {
        let label = UILabel()
@@ -337,10 +443,7 @@ class SonoCollectionViewCell: BaseCollectionViewCell, UITextViewDelegate {
     }()
     let dateLabel: UILabel = {
         let label = UILabel()
-       let date = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "M.d.yy h:mm a"
-        label.text = formatter.string(from: date)
+        label.text = "Date"
         label.font = label.font.withSize(12)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
