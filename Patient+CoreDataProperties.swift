@@ -2,7 +2,7 @@
 //  Patient+CoreDataProperties.swift
 //  Beta_List_6
 //
-//  Created by Ryan Callery on 7/19/18.
+//  Created by Ryan Callery on 7/22/18.
 //  Copyright © 2018 Ryan Callery. All rights reserved.
 //
 //
@@ -17,14 +17,16 @@ extension Patient {
         return NSFetchRequest<Patient>(entityName: "Patient")
     }
 
-    @NSManaged public var firstName: String?
-    @NSManaged public var lastName: String?
-    @NSManaged public var medicalRecordNumber: String?
-    @NSManaged public var telephoneNumber: String?
     @NSManaged public var age: String?
-    @NSManaged public var parity: String?
+    @NSManaged public var firstName: String?
     @NSManaged public var gestationalAge: String?
     @NSManaged public var historyOfPresentIllness: String?
+    @NSManaged public var lastName: String?
+    @NSManaged public var medicalRecordNumber: String?
+    @NSManaged public var parity: String?
+    @NSManaged public var telephoneNumber: String?
+    @NSManaged public var followUpDate: NSDate?
+    @NSManaged public var followUpPlan: String?
     @NSManaged public var hcg: NSOrderedSet?
     @NSManaged public var ultrasound: NSOrderedSet?
 

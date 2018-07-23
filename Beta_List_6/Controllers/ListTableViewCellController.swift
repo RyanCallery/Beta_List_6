@@ -8,7 +8,7 @@
 
 import UIKit
 import CoreData 
-
+import UserNotifications
 
 class ListTableViewCellController: UITableViewController {
     
@@ -17,7 +17,6 @@ class ListTableViewCellController: UITableViewController {
         patientList.append(patient!)
         tableView.reloadData() 
         }
-        
     }
 
     
@@ -67,6 +66,8 @@ class ListTableViewCellController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let patientListCell = tableView.dequeueReusableCell(withIdentifier: listCell, for: indexPath) as!  ListTableViewCell
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM dd yy"
         patientListCell.firstNameLabel.text = patientList[indexPath.row].firstName
         patientListCell.lastNameLabel.text = patientList[indexPath.row].lastName 
         patientListCell.ageLabel.text = patientList[indexPath.row].age
@@ -74,6 +75,10 @@ class ListTableViewCellController: UITableViewController {
         patientListCell.gestationalAgeLabel.text = patientList[indexPath.row].gestationalAge
         patientListCell.hpiTextView.text = patientList[indexPath.row].historyOfPresentIllness
         patientListCell.listTableViewController = self
+        if patientList[indexPath.row].followUpDate != nil {
+        patientListCell.followUpDateLabel.text = formatter.string(from: patientList[indexPath.row].followUpDate! as Date)
+        }
+        patientListCell.followUpTextView.text = patientList[indexPath.row].followUpPlan
         return patientListCell
     }
     
@@ -207,6 +212,23 @@ class ListTableViewCell: UITableViewCell {
         return textView
     }()
     
+    let followUpDateLabel: UILabel = {
+       let label = UILabel()
+        label.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: UILayoutConstraintAxis.horizontal)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = label.font.withSize(12)
+        return label
+    }()
+    
+    let followUpTextView: UITextView = {
+       let textView = UITextView()
+        textView.setContentHuggingPriority(UILayoutPriority(rawValue: 250), for: UILayoutConstraintAxis.horizontal)
+        textView.text = "Follow up plan"
+        textView.font = UIFont.systemFont(ofSize: 15)
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        return textView
+    }()
+    
     func setupViews() {
         addSubview(profileImage)
         addSubview(firstNameLabel)
@@ -216,12 +238,19 @@ class ListTableViewCell: UITableViewCell {
         addSubview(gestationalAgeLabel)
         addSubview(hpiTextView)
         
+        let followUpStack = UIStackView(arrangedSubviews: [followUpDateLabel, followUpTextView])
+        followUpStack.translatesAutoresizingMaskIntoConstraints = false
+        followUpStack.axis = .horizontal
+        
+        addSubview(followUpStack)
+        
+        
         addConstraintsWithFormat(format: "H:|-8-[v0(50)]-8-[v1]-8-[v2]", views: profileImage, firstNameLabel, lastNameLabel)
 //        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-8-[v0(50)]-8-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0" : profileImage, "v1": firstNameLabel]))
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v0]-8-[v1]-8-[v3]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0" : ageLabel, "v1": parityLabel, "v3": gestationalAgeLabel]))
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0": hpiTextView]))
-        
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-8-[v0(50)]-[v1]-[v2(50)]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0" : profileImage, "v1" : ageLabel, "v2": hpiTextView]))
+        addConstraintsWithFormat(format: "H:|[v0]|", views: followUpStack)
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-8-[v0(50)]-[v1]-[v2(50)]-[v3(50)]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0" : profileImage, "v1" : ageLabel, "v2": hpiTextView, "v3": followUpStack]))
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-8-[v0(50)]-[v1]-[v2]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0" : profileImage, "v1": parityLabel, "v2": hpiTextView]))
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-8-[v0(50)]-[v1]-[v2]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0" : profileImage, "v1": gestationalAgeLabel, "v2": hpiTextView]))
         

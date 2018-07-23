@@ -8,6 +8,8 @@
 
 import Foundation
 import CoreData
+import UserNotifications
+
 
 class DatabaseController {
     

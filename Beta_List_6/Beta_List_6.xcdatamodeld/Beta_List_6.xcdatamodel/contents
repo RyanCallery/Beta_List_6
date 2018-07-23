@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14135" systemVersion="17F77" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14135" systemVersion="17G65" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Hcg" representedClassName="Hcg" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="hcgLevel" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="methotrexate" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="patient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="hcg" inverseEntity="Patient" syncable="YES"/>
     </entity>
     <entity name="Patient" representedClassName="Patient" syncable="YES">
         <attribute name="age" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="followUpDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="followUpPlan" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="gestationalAge" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="historyOfPresentIllness" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
@@ -26,8 +29,8 @@
         <relationship name="patient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="ultrasound" inverseEntity="Patient" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Patient" positionX="-2439" positionY="-756" width="128" height="193"/>
-        <element name="Hcg" positionX="-2115" positionY="-783" width="128" height="88"/>
+        <element name="Hcg" positionX="-2115" positionY="-783" width="128" height="105"/>
+        <element name="Patient" positionX="-2439" positionY="-756" width="128" height="225"/>
         <element name="Ultrasound" positionX="-2117" positionY="-558" width="128" height="135"/>
     </elements>
 </model>

@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import CoreData
+import UserNotifications
 
 class BetaTrendViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     override init(collectionViewLayout layout: UICollectionViewLayout) {
@@ -17,9 +19,17 @@ class BetaTrendViewController: UICollectionViewController, UICollectionViewDeleg
         fatalError("init(coder:) has not been implemented")
     }
     
-    
+    var patient: Patient? = nil
     let cellID = "cellID"
     let headerID = "headerID"
+    var hcgArray = [Hcg]()
+    var betaLevelsOnlyArray = [String]()
+    var datesOnlyArray = [Date]()
+    lazy var betaIntervalChange = percentChangeOverTime(betaLevelsOnlyArray)
+    lazy var dateInterval = [String]()
+    let calendar = Calendar.current
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let frame = self.view.frame
@@ -28,14 +38,105 @@ class BetaTrendViewController: UICollectionViewController, UICollectionViewDeleg
         collectionView?.backgroundColor = .green
         collectionView?.register(BetaTrendCollectionViewCell.self, forCellWithReuseIdentifier: cellID)
         collectionView?.register(UICollectionViewCell.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerID)
+        pullHcgObjectsFromCoreData()
+        createHcgArrayForCalculations()
+        createDateArrayForCalculation()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        dateInterval = dateIntervalCalculation(datesOnlyArray)
+    }
+    
+    func pullHcgObjectsFromCoreData(){
+        if patient?.hcg?.count != 0 {
+            for object in 0...(patient?.hcg?.count)! - 1 {
+                hcgArray.append(patient!.hcg?.object(at: object) as! Hcg)
+            }
+            }
+        }
+    func createHcgArrayForCalculations(){
+        if hcgArray.isEmpty == false {
+            for betaValue in 0...hcgArray.count - 1 {
+            betaLevelsOnlyArray.append(hcgArray[betaValue].hcgLevel!)
+            }
+            }
+        }
+    
+    func createDateArrayForCalculation() {
+        if hcgArray.isEmpty == false {
+            for dateValue in 0...hcgArray.count - 1 {
+                datesOnlyArray.append(hcgArray[dateValue].date! as Date)
+            }
+        }
+    }
+    func percentChangeOverTime(_ betaChange: [String]) -> [String]{
+        
+        var percentIncreaseStringArray = [""]
+        
+        if betaLevelsOnlyArray.count > 1 {
+            // convert the array of strings into an array of doubles
+            var percentIncreaseArray = [Double]()
+            let doubleArray = betaLevelsOnlyArray.map{beta in Double(beta)!}
+            for index in 0...doubleArray.count - 2 {
+            // calcultate the percent change between interval beta levels
+                print("Is the percent change function working")
+                let increase = doubleArray[index + 1] - doubleArray[index]
+                let percentIncrease = (increase / doubleArray[index]) * 100
+                percentIncreaseArray.append(percentIncrease)
+            }
+            // truncate the interval change so it doesn't have any decimal places for the view
+            let truncatedArray = percentIncreaseArray.map{beta in beta.truncate(places: 0, number: beta)}
+            let truncatedArrayAsString = truncatedArray.map{beta in String(beta)}
+            percentIncreaseStringArray.append(contentsOf: truncatedArrayAsString)
+            
+        } else if betaLevelsOnlyArray.count == 1 {
+            percentIncreaseStringArray.append("")
+        }
+        return percentIncreaseStringArray
+    }
+    
+    func dateIntervalCalculation(_ date: [Date]) -> [String] {
+        var dateIntervalsCalculated = [""]
+        
+        if date.count > 1 {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "h:mm a"
+            for index in 0...date.count - 2 {
+            let eachDateInterval = date[index + 1].hours(from: date[index])
+                print("is the date interval calc func working")
+                if eachDateInterval > 48 {
+                    dateFormatter.dateFormat = "d"
+                } else {
+                    dateFormatter.dateFormat = "h"
+                }
+                let eachIntervalAsString = String(eachDateInterval)
+                dateIntervalsCalculated.append(eachIntervalAsString)
+            }
+            
+        } else {
+            dateIntervalsCalculated.append("")
+            
+        }
+        return dateIntervalsCalculated
+        
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        guard let numberOfHcgValuesForPatient = patient?.hcg?.count else{return 0}
+        return numberOfHcgValuesForPatient
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! BetaTrendCollectionViewCell
+        let formatter = DateFormatter()
+        formatter.dateFormat = "M.d.yy"
+        let betaObject = patient?.hcg?.object(at: indexPath.item) as! Hcg
+        cell.betaLabel.text = betaObject.hcgLevel
+        cell.dateLabel.text = formatter.string(from: betaObject.date! as Date)
+        cell.dateIntervalLabel.text = dateInterval[indexPath.item]
+        cell.percentChangeLabel.text = betaIntervalChange[indexPath.item]
+
         
 //        let size = CGSize(width: 50, height: 1000)
 //        let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
@@ -125,5 +226,18 @@ class BetaTrendCollectionViewCell: UICollectionViewCell {
     }
     
     
+    
+}
+extension Double {
+    public func truncate(places: Int, number: Double) -> Double {
+        
+        return Double(floor(pow(10.0, Double(places)) * self) / pow(10.0, Double(places)))
+    }
+}
+
+extension Date {
+    func hours(from date: Date) -> Int {
+        return Calendar.current.dateComponents([.hour], from: date, to: self).hour ?? 0
+    }
     
 }

@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import UserNotifications
 
 class AddPatientViewController: UITableViewController {
     let firstNameCell = "firstNameCell"

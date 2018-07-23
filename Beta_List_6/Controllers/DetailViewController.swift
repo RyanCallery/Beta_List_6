@@ -8,6 +8,8 @@
 
 import UIKit
 import CoreData
+import UserNotifications
+
 
 let betaID = "betaID"
 let sonoID = "sonoID "
@@ -19,11 +21,8 @@ class DetailViewController: UIViewController, UICollectionViewDelegateFlowLayout
     
     
     var managedContext: NSManagedObjectContext! = nil
-    var patient: Patient? = nil {didSet {
-        print("this is \(patient?.hcg) and \(patient?.ultrasound) ")
-        
-        }
-    }
+    var patient: Patient? = nil
+    
     
     
     let betaCollectionView: UICollectionView = {
@@ -105,6 +104,16 @@ class DetailViewController: UIViewController, UICollectionViewDelegateFlowLayout
         return textView
     }()
     
+    let followUpButton: UIButton = {
+       let button = UIButton(frame: .zero)
+        button.setTitle("Follow Up", for: .normal)
+        button.backgroundColor = .orange
+        button.titleLabel?.font = .systemFont(ofSize: 12)
+        button.layer.cornerRadius = 10
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button 
+    }()
+    
     
 
     override func viewDidLoad() {
@@ -130,8 +139,15 @@ class DetailViewController: UIViewController, UICollectionViewDelegateFlowLayout
        
         betaCollectionView.register(BetaCollectionViewCell.self, forCellWithReuseIdentifier: betaID)
         sonoCollectionView.register(SonoCollectionViewCell.self, forCellWithReuseIdentifier: sonoID)
-        
+        followUpButton.addTarget(self, action: #selector(segueToFollowUpView), for: .touchUpInside)
         setupStack()
+    }
+    
+    @objc func segueToFollowUpView(){
+        let controller = NotificationViewController()
+        controller.managedContext = self.managedContext
+        controller.patient = self.patient!
+        navigationController?.pushViewController(controller, animated: true)
     }
     
     private func setupNavigationBarItems(){
@@ -166,6 +182,7 @@ class DetailViewController: UIViewController, UICollectionViewDelegateFlowLayout
                 let hcg = Hcg(context: self.managedContext)
                 hcg.hcgLevel = hcgText
                 hcg.date = date as NSDate
+                hcg.methotrexate = false
                 self.patient?.addToHcg(hcg)
                 do {
                     try self.managedContext.save()
@@ -242,10 +259,13 @@ class DetailViewController: UIViewController, UICollectionViewDelegateFlowLayout
     
     
     func setupStack() {
-        let nameStack = UIStackView(arrangedSubviews: [firstNameLabel, lastNameLabel])
+        let nameStack = UIStackView(arrangedSubviews: [firstNameLabel, lastNameLabel, followUpButton])
         nameStack.translatesAutoresizingMaskIntoConstraints = false
         nameStack.axis = .horizontal
-        nameStack.distribution = .fillEqually
+        nameStack.addConstraintsWithFormat(format: "H:|[v0]-20-[v1]", views: firstNameLabel, lastNameLabel)
+        nameStack.spacing = 8
+        firstNameLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: UILayoutConstraintAxis.horizontal)
+        nameStack.addConstraintsWithFormat(format: "H:[v0(60)]-8-|", views: followUpButton)
         
         let phoneAndMrnNumberStack = UIStackView(arrangedSubviews: [mrnLabel, telephoneNumberLabel])
         phoneAndMrnNumberStack.translatesAutoresizingMaskIntoConstraints = false
@@ -273,9 +293,11 @@ class DetailViewController: UIViewController, UICollectionViewDelegateFlowLayout
             button.setTitle("β", for: .normal)
             button.backgroundColor = .red
             button.layer.cornerRadius = 15
-            button.layer.masksToBounds = true 
+            button.layer.masksToBounds = true
+            button.addTarget(self, action: #selector(segueToBetaTrendVC), for: .touchUpInside)
             return button
         }()
+        
         
         let betaTrendButtonView = UIView()
         betaTrendButtonView.translatesAutoresizingMaskIntoConstraints = false
@@ -313,6 +335,13 @@ class DetailViewController: UIViewController, UICollectionViewDelegateFlowLayout
         mainStack.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -8).isActive = true
     }
     
+    @objc func segueToBetaTrendVC() {
+        let layout = UICollectionViewFlowLayout()
+        let controller = BetaTrendViewController(collectionViewLayout: layout)
+        controller.patient = self.patient 
+        navigationController?.pushViewController(controller, animated: true)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == betaCollectionView{
         return CGSize(width: collectionView.frame.width / 4, height: collectionView.frame.height)
@@ -348,6 +377,9 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
             betaCell.betaLabel.text = betaObject.hcgLevel
             betaCell.dateLabel.text = dateFormatter.string(from: betaObject.date! as Date)
             betaCell.timeLabel.text = timeFormatter.string(from: betaObject.date! as Date)
+            if betaObject.methotrexate == true {
+                betaCell.betaLabel.backgroundColor = .yellow
+            }
 
             return betaCell
         } else {
@@ -361,6 +393,20 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
             sonoCell.rightOvaryTextView.text = sonoObject.rightOvary
             sonoCell.fluidTextView.text = sonoObject.fluid
             return sonoCell
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == betaCollectionView {
+            let betaObject = patient?.hcg?.object(at: indexPath.item) as! Hcg
+            betaObject.methotrexate = true
+            patient?.replaceHcg(at: indexPath.item, with: betaObject)
+            do {
+                try self.managedContext.save()
+            }catch {
+                fatalError("Unable to save updated mtx input")
+            }
+            betaCollectionView.reloadData()
         }
     }
     

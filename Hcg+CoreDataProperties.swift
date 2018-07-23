@@ -2,7 +2,7 @@
 //  Hcg+CoreDataProperties.swift
 //  Beta_List_6
 //
-//  Created by Ryan Callery on 7/19/18.
+//  Created by Ryan Callery on 7/22/18.
 //  Copyright © 2018 Ryan Callery. All rights reserved.
 //
 //
@@ -17,8 +17,9 @@ extension Hcg {
         return NSFetchRequest<Hcg>(entityName: "Hcg")
     }
 
-    @NSManaged public var hcgLevel: String?
     @NSManaged public var date: NSDate?
+    @NSManaged public var hcgLevel: String?
+    @NSManaged public var methotrexate: Bool
     @NSManaged public var patient: Patient?
 
 }
