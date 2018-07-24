@@ -61,10 +61,10 @@ class AddPatientViewController: UITableViewController {
         } catch {
             fatalError("Unable to save patient to database")
         }
-        let patientListViewController = navigationController?.viewControllers[0] as! ListTableViewCellController
+        let patientListViewController = navigationController?.viewControllers[1] as! ListTableViewCellController
         patientListViewController.patient = self.patient 
-        navigationController?.popToRootViewController(animated: true)
-        
+        navigationController?.popToViewController(patientListViewController, animated: true)
+
     }
     
     ///  Mark: TableView Data Source and Delegate Methods

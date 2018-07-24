@@ -29,7 +29,7 @@ class DetailViewController: UIViewController, UICollectionViewDelegateFlowLayout
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collection.backgroundColor = .black
+        collection.backgroundColor = .lightGray
         collection.isPagingEnabled = true
         collection.translatesAutoresizingMaskIntoConstraints = false
         return collection
@@ -41,7 +41,7 @@ class DetailViewController: UIViewController, UICollectionViewDelegateFlowLayout
        let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .green
+        collectionView.backgroundColor = .lightGray
         collectionView.isPagingEnabled = true
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
@@ -50,83 +50,129 @@ class DetailViewController: UIViewController, UICollectionViewDelegateFlowLayout
     var firstNameLabel: UILabel = {
        let label = UILabel()
         label.text = "First Name"
-        label.backgroundColor = .red
+        label.backgroundColor = .white
+        label.font = label.font.withSize(30)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     let lastNameLabel: UILabel = {
        let label = UILabel()
         label.text = "Last Name"
-        label.backgroundColor = .red
+        label.backgroundColor = .white
+        label.font = label.font.withSize(30)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     let mrnLabel: UILabel = {
        let label = UILabel()
         label.text = "Mrn"
-        label.backgroundColor = .red
+        label.backgroundColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     let telephoneNumberLabel: UILabel = {
         let label = UILabel()
         label.text = "Phone Number"
-        label.backgroundColor = .red
+        label.backgroundColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     let ageLabel: UILabel = {
         let label = UILabel()
         label.text = "Age"
-        label.backgroundColor = .red
+        label.font = label.font.withSize(30)
+        label.backgroundColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     let parityLabel: UILabel = {
         let label = UILabel()
         label.text = "P"
-        label.backgroundColor = .red
+        label.font = label.font.withSize(30)
+        label.backgroundColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     let gALabel: UILabel = {
         let label = UILabel()
         label.text = "GA"
-        label.backgroundColor = .red
+        label.backgroundColor = .white
+        label.font = label.font.withSize(30)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
-    }()
-    
-    let hpiTextview: UITextView = {
-        let textView = UITextView()
-        textView.isEditable = false
-        textView.text = "HPI"
-        return textView
     }()
     
     let followUpButton: UIButton = {
        let button = UIButton(frame: .zero)
         button.setTitle("Follow Up", for: .normal)
-        button.backgroundColor = .orange
+        button.backgroundColor = .lightGray
         button.titleLabel?.font = .systemFont(ofSize: 12)
         button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
         return button 
     }()
     
+    let patientInformationView: UIView = {
+       let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
+    
+    let betaTrendButton: UIButton = {
+        let button = UIButton(frame: .zero)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("β", for: .normal)
+        button.backgroundColor = .red
+        button.layer.cornerRadius = 15
+        button.layer.masksToBounds = true
+        button.addTarget(self, action: #selector(segueToBetaTrendVC), for: .touchUpInside)
+        return button
+    }()
+    
+    let lineSeparatorOne: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .black
+        return view
+    }()
+    let lineSeparatorTwo: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .black
+        return view
+    }()
+    let lineSeparatorThree: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .black
+        return view
+    }()
+    
+    let lineSeparatorFour: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .black
+        return view
+    }()
+    
+    let lineSeparatorFive: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .black
+        return view
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         firstNameLabel.text = patient?.firstName != nil ? patient?.firstName : ""
         lastNameLabel.text = patient?.lastName != nil ? patient?.lastName : ""
-        mrnLabel.text = patient?.medicalRecordNumber != nil ? patient?.medicalRecordNumber : ""
-        telephoneNumberLabel.text = patient?.telephoneNumber != nil ? patient?.telephoneNumber : ""
+        mrnLabel.text = patient?.medicalRecordNumber != nil ? "MRN: \(patient?.medicalRecordNumber ?? "")" : ""
+        telephoneNumberLabel.text = patient?.telephoneNumber != nil ? "Cell: \(patient?.telephoneNumber ?? "")" : ""
         ageLabel.text = patient?.age != nil ? "\(patient?.age ?? "") yo" : ""
         parityLabel.text = patient?.parity != nil ? "P\(patient?.parity ?? "")" : ""
-        gALabel.text = patient?.gestationalAge != nil ? patient?.gestationalAge : ""
-        hpiTextview.text = patient?.historyOfPresentIllness != nil ? patient?.historyOfPresentIllness : ""
+        gALabel.text = patient?.gestationalAge != nil ? "\(patient?.gestationalAge ?? "") weeks" : ""
         
         view.backgroundColor = .white
         
@@ -154,9 +200,10 @@ class DetailViewController: UIViewController, UICollectionViewDelegateFlowLayout
         
         
         
-        let ultrasoundButton = UIButton(type: .roundedRect)
+        let ultrasoundButton = UIButton(type: .system)
         ultrasoundButton.imageView?.contentMode = .scaleAspectFit
-       ultrasoundButton.setImage(#imageLiteral(resourceName: "UltrasoundBlack") .withRenderingMode(.alwaysOriginal),for: .normal)
+        ultrasoundButton.setImage(#imageLiteral(resourceName: "UltrasoundBlack") .withRenderingMode(.alwaysOriginal),for: .normal)
+        ultrasoundButton.setTitle("+", for: .normal)
         ultrasoundButton.frame = CGRect(x: 0, y: 0, width: 22, height: 22)
         ultrasoundButton.addTarget(self, action: #selector(addUltrasound), for: .touchUpInside)
         
@@ -259,49 +306,77 @@ class DetailViewController: UIViewController, UICollectionViewDelegateFlowLayout
     
     
     func setupStack() {
-        let nameStack = UIStackView(arrangedSubviews: [firstNameLabel, lastNameLabel, followUpButton])
-        nameStack.translatesAutoresizingMaskIntoConstraints = false
-        nameStack.axis = .horizontal
-        nameStack.addConstraintsWithFormat(format: "H:|[v0]-20-[v1]", views: firstNameLabel, lastNameLabel)
-        nameStack.spacing = 8
-        firstNameLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: UILayoutConstraintAxis.horizontal)
-        nameStack.addConstraintsWithFormat(format: "H:[v0(60)]-8-|", views: followUpButton)
         
-        let phoneAndMrnNumberStack = UIStackView(arrangedSubviews: [mrnLabel, telephoneNumberLabel])
-        phoneAndMrnNumberStack.translatesAutoresizingMaskIntoConstraints = false
-        phoneAndMrnNumberStack.axis = .horizontal
-        phoneAndMrnNumberStack.distribution = .fillEqually
+        patientInformationView.addSubview(firstNameLabel)
+        patientInformationView.addSubview(lastNameLabel)
+        patientInformationView.addSubview(followUpButton)
+        patientInformationView.addSubview(mrnLabel)
+        patientInformationView.addSubview(telephoneNumberLabel)
+        patientInformationView.addSubview(ageLabel)
+        patientInformationView.addSubview(parityLabel)
+        patientInformationView.addSubview(gALabel)
+        patientInformationView.addSubview(lineSeparatorOne)
+        patientInformationView.addSubview(lineSeparatorTwo)
+        patientInformationView.addSubview(lineSeparatorThree)
         
-        let ageParityGaStack = UIStackView(arrangedSubviews: [ageLabel, parityLabel, gALabel])
-        ageParityGaStack.translatesAutoresizingMaskIntoConstraints = false
-        ageParityGaStack.axis = .horizontal
-        ageParityGaStack.distribution = .fillEqually
+        // set x, y, width, height  for each object in patientInformationView
         
-        let hpiStack = UIStackView(arrangedSubviews: [hpiTextview])
-        hpiStack.translatesAutoresizingMaskIntoConstraints = false
-        hpiStack.distribution = .fillEqually
-        hpiStack.axis = .horizontal
+        firstNameLabel.topAnchor.constraint(equalTo: patientInformationView.topAnchor).isActive = true
+        firstNameLabel.leftAnchor.constraint(equalTo: patientInformationView.leftAnchor, constant: 10).isActive = true
+        firstNameLabel.bottomAnchor.constraint(equalTo: mrnLabel.topAnchor).isActive = true
+        firstNameLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        firstNameLabel.rightAnchor.constraint(equalTo: lastNameLabel.leftAnchor, constant: -10).isActive = true
         
-        let patientInformationStack = UIStackView(arrangedSubviews: [nameStack, phoneAndMrnNumberStack,  ageParityGaStack, hpiStack])
-        patientInformationStack.translatesAutoresizingMaskIntoConstraints = false
-        patientInformationStack.axis = .vertical
-        patientInformationStack.distribution = .fillEqually
+        lastNameLabel.topAnchor.constraint(equalTo: patientInformationView.topAnchor).isActive = true
+        lastNameLabel.leftAnchor.constraint(equalTo: firstNameLabel.rightAnchor).isActive = true
+        lastNameLabel.bottomAnchor.constraint(equalTo: mrnLabel.topAnchor).isActive = true
+
         
-        let betaTrendButton: UIButton = {
-           let button = UIButton(frame: .zero)
-            button.translatesAutoresizingMaskIntoConstraints = false
-            button.setTitle("β", for: .normal)
-            button.backgroundColor = .red
-            button.layer.cornerRadius = 15
-            button.layer.masksToBounds = true
-            button.addTarget(self, action: #selector(segueToBetaTrendVC), for: .touchUpInside)
-            return button
-        }()
+        followUpButton.topAnchor.constraint(equalTo: patientInformationView.topAnchor).isActive = true
+        followUpButton.widthAnchor.constraint(equalToConstant: 75).isActive = true
+        followUpButton.rightAnchor.constraint(equalTo: patientInformationView.rightAnchor).isActive = true
+        followUpButton.bottomAnchor.constraint(equalTo: mrnLabel.topAnchor).isActive = true
         
+        mrnLabel.topAnchor.constraint(equalTo: firstNameLabel.bottomAnchor).isActive = true
+        mrnLabel.leftAnchor.constraint(equalTo: patientInformationView.leftAnchor, constant: 20).isActive = true
+        mrnLabel.heightAnchor.constraint(equalToConstant: 18).isActive = true
+        mrnLabel.rightAnchor.constraint(equalTo: telephoneNumberLabel.leftAnchor, constant: -20).isActive = true
+
+        
+        telephoneNumberLabel.topAnchor.constraint(equalTo: firstNameLabel.bottomAnchor).isActive = true
+        telephoneNumberLabel.leftAnchor.constraint(equalTo: mrnLabel.rightAnchor).isActive = true
+        telephoneNumberLabel.heightAnchor.constraint(equalToConstant: 18).isActive = true
+
+        lineSeparatorOne.topAnchor.constraint(equalTo: mrnLabel.bottomAnchor).isActive = true
+        lineSeparatorOne.widthAnchor.constraint(equalTo: patientInformationView.widthAnchor).isActive = true
+        lineSeparatorOne.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        
+        lineSeparatorTwo.bottomAnchor.constraint(equalTo: ageLabel.topAnchor).isActive = true
+        lineSeparatorTwo.widthAnchor.constraint(equalTo: patientInformationView.widthAnchor).isActive = true
+        lineSeparatorTwo.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        
+       ageLabel.leftAnchor.constraint(equalTo: patientInformationView.leftAnchor, constant: 10).isActive = true
+        ageLabel.bottomAnchor.constraint(equalTo: patientInformationView.bottomAnchor).isActive = true
+        ageLabel.rightAnchor.constraint(equalTo: parityLabel.leftAnchor, constant: -20).isActive = true
+        ageLabel.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        
+        parityLabel.leftAnchor.constraint(equalTo: ageLabel.rightAnchor).isActive = true
+        parityLabel.bottomAnchor.constraint(equalTo: patientInformationView.bottomAnchor).isActive = true
+        parityLabel.rightAnchor.constraint(equalTo: gALabel.leftAnchor, constant: -20).isActive = true
+        parityLabel.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        
+        gALabel.bottomAnchor.constraint(equalTo: patientInformationView.bottomAnchor).isActive = true
+        gALabel.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        
+        lineSeparatorThree.bottomAnchor.constraint(equalTo: patientInformationView.bottomAnchor).isActive = true
+        lineSeparatorThree.widthAnchor.constraint(equalTo: patientInformationView.widthAnchor).isActive = true
+        lineSeparatorThree.heightAnchor.constraint(equalToConstant: 2).isActive = true
         
         let betaTrendButtonView = UIView()
         betaTrendButtonView.translatesAutoresizingMaskIntoConstraints = false
-        betaTrendButtonView.backgroundColor = .cyan
+        betaTrendButtonView.backgroundColor = .lightGray
+//        betaTrendButtonView.layer.borderColor = UIColor.black.cgColor
+//        betaTrendButtonView.layer.borderWidth = 1
         betaTrendButtonView.addSubview(betaTrendButton)
         betaTrendButton.centerXAnchor.constraint(equalTo: betaTrendButtonView.centerXAnchor).isActive = true
         betaTrendButton.centerYAnchor.constraint(equalTo: betaTrendButtonView.centerYAnchor).isActive = true
@@ -313,17 +388,21 @@ class DetailViewController: UIViewController, UICollectionViewDelegateFlowLayout
         betaStackView.axis = .horizontal
         betaStackView.addConstraintsWithFormat(format: "H:|[v0(40)]-[v1]|", views: betaTrendButtonView, betaCollectionView)
         
-        
-        
-        let collectionViewStack = UIStackView(arrangedSubviews: [betaStackView, sonoCollectionView])
-        collectionViewStack.arrangedSubviews[0].heightAnchor.constraint(equalTo: collectionViewStack.heightAnchor, multiplier: 0.33).isActive = true
+        let collectionViewStack = UIStackView(arrangedSubviews: [lineSeparatorFour,betaStackView,lineSeparatorFive, sonoCollectionView])
+        lineSeparatorFour.topAnchor.constraint(equalTo: collectionViewStack.topAnchor).isActive = true
+        lineSeparatorFour.widthAnchor.constraint(equalTo: collectionViewStack.widthAnchor).isActive = true
+        lineSeparatorFour.heightAnchor.constraint(equalToConstant: 0.5)
+        lineSeparatorFive.topAnchor.constraint(equalTo: betaStackView.bottomAnchor).isActive = true
+        lineSeparatorFive.widthAnchor.constraint(equalTo: collectionViewStack.widthAnchor).isActive = true
+        lineSeparatorFive.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        collectionViewStack.arrangedSubviews[1].heightAnchor.constraint(equalTo: collectionViewStack.heightAnchor, multiplier: 1/3).isActive = true
         collectionViewStack.translatesAutoresizingMaskIntoConstraints = false
         collectionViewStack.axis = .vertical
-        collectionViewStack.spacing = 8
+        collectionViewStack.spacing = 0
         
-        let mainStack = UIStackView(arrangedSubviews: [patientInformationStack, collectionViewStack])
+        let mainStack = UIStackView(arrangedSubviews: [patientInformationView, collectionViewStack])
         mainStack.translatesAutoresizingMaskIntoConstraints = false
-        mainStack.spacing = 8
+        mainStack.spacing = 0
         mainStack.axis = .vertical
         mainStack.arrangedSubviews[1].heightAnchor.constraint(equalTo: mainStack.arrangedSubviews[0].heightAnchor, multiplier: 2).isActive = true
         
@@ -351,7 +430,7 @@ class DetailViewController: UIViewController, UICollectionViewDelegateFlowLayout
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let inset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+        let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)
         return inset
     }
     
@@ -412,9 +491,6 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
 class BetaCollectionViewCell: BaseCollectionViewCell {
     
-    
-    
-    
     let dateLabel: UILabel = {
        let label = UILabel()
         label.text = "Date"
@@ -433,6 +509,12 @@ class BetaCollectionViewCell: BaseCollectionViewCell {
     let betaLabel: UILabel = {
        let label = UILabel()
         label.text = "beta"
+        label.font = label.font.withSize(35)
+        label.layer.cornerRadius = 30
+        label.layer.borderWidth = 0.5
+        label.layer.borderColor = UIColor.black.cgColor
+        label.backgroundColor = #colorLiteral(red: 0.09107228369, green: 0.6968451142, blue: 0.113052167, alpha: 1)
+        label.layer.masksToBounds = true
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -443,14 +525,14 @@ class BetaCollectionViewCell: BaseCollectionViewCell {
         
         let betaView = UIView()
         betaView.translatesAutoresizingMaskIntoConstraints = false
-        betaView.backgroundColor = .green
+        betaView.backgroundColor = .lightGray
         betaView.addSubview(betaLabel)
         betaView.addConstraintsWithFormat(format: "V:|[v0]|", views: betaLabel)
         betaView.addConstraintsWithFormat(format: "H:|[v0]|", views: betaLabel)
         
         let dateView = UIView()
         dateView.translatesAutoresizingMaskIntoConstraints = false
-        dateView.backgroundColor = .purple
+        dateView.backgroundColor = #colorLiteral(red: 1, green: 0.4932718873, blue: 0.4739984274, alpha: 1)
         dateView.addSubview(dateLabel)
         dateView.addSubview(timeLabel)
         dateLabel.topAnchor.constraint(equalTo: dateView.topAnchor).isActive = true
@@ -553,7 +635,7 @@ class SonoCollectionViewCell: BaseCollectionViewCell, UITextViewDelegate {
     
     override func setupViews() {
         super.setupViews()
-        backgroundColor = .orange
+        backgroundColor = #colorLiteral(red: 1, green: 0.4932718873, blue: 0.4739984274, alpha: 1)
         
         
         setupStacks()

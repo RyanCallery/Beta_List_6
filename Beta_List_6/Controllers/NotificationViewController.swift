@@ -18,15 +18,25 @@ class NotificationViewController: UIViewController, UITextFieldDelegate {
     
     let datePicker: UIDatePicker = {
        let picker = UIDatePicker(frame: .zero)
-        picker.minimumDate = Date() 
+        picker.minimumDate = Date()
+        picker.layer.cornerRadius = 15
+        picker.layer.masksToBounds = true
+        picker.layer.borderWidth = 1
+        picker.layer.borderColor = UIColor.black.cgColor
+        picker.backgroundColor = .lightGray
         picker.translatesAutoresizingMaskIntoConstraints = false
         return picker
     }()
     
     let planTextField: UITextField = {
-       let textField = UITextField()
+       let textField = UITextField() 
         textField.textAlignment = .center
-        textField.placeholder = "Follow up plan"
+        textField.layer.cornerRadius = 5
+        textField.layer.masksToBounds = true
+        textField.backgroundColor = .lightGray
+        textField.layer.borderColor = UIColor.black.cgColor
+        textField.layer.borderWidth = 0.5
+        textField.placeholder = "Follow Up Plan"
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -34,6 +44,11 @@ class NotificationViewController: UIViewController, UITextFieldDelegate {
     let dateTextField: UITextField = {
        let textField = UITextField()
         textField.textAlignment = .center
+        textField.layer.cornerRadius = 5
+        textField.backgroundColor = .lightGray
+        textField.layer.borderWidth = 0.5
+        textField.layer.borderColor = UIColor.black.cgColor
+        textField.layer.masksToBounds = true
         textField.placeholder = "Select a follow up date"
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
@@ -41,7 +56,13 @@ class NotificationViewController: UIViewController, UITextFieldDelegate {
     
     let setFollowUpButton: UIButton = {
        let button = UIButton(frame: .zero)
+        button.layer.cornerRadius = 5
+        button.layer.masksToBounds = true
+        button.backgroundColor = #colorLiteral(red: 1, green: 0.4932718873, blue: 0.4739984274, alpha: 1)
+        button.layer.borderColor = UIColor.black.cgColor
+        button.layer.borderWidth = 0.5
         button.setTitle("Set follow up", for: .normal)
+        button.setTitleColor(.black, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -49,9 +70,10 @@ class NotificationViewController: UIViewController, UITextFieldDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.title = "Follow Up"
         dateTextField.delegate = self
         planTextField.delegate = self
-        view.backgroundColor = .red
+        view.backgroundColor = .white
         setupView()
         
         
@@ -69,11 +91,28 @@ class NotificationViewController: UIViewController, UITextFieldDelegate {
         view.addSubview(planTextField)
         view.addSubview(setFollowUpButton)
         
-        view.addConstraintsWithFormat(format: "V:|-200-[v0]-[v1]-30-[v2]-[v3]", views: dateTextField,datePicker, planTextField, setFollowUpButton)
-        view.addConstraintsWithFormat(format: "H:|[v0]|", views: dateTextField)
-        view.addConstraintsWithFormat(format: "H:|[v0]|", views: datePicker)
-        view.addConstraintsWithFormat(format: "H:|[v0]|", views: planTextField)
-        view.addConstraintsWithFormat(format: "H:|[v0]|", views: setFollowUpButton)
+        let safeAreaGuide = view.safeAreaLayoutGuide
+        dateTextField.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor, constant: 50).isActive = true
+        dateTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        dateTextField.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        dateTextField.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/2).isActive = true
+        dateTextField.bottomAnchor.constraint(equalTo: datePicker.topAnchor, constant: -5).isActive = true
+        
+        datePicker.topAnchor.constraint(equalTo: dateTextField.bottomAnchor).isActive = true
+        datePicker.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
+        planTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        planTextField.topAnchor.constraint(equalTo: datePicker.bottomAnchor, constant: 30).isActive = true
+        planTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        planTextField.widthAnchor.constraint(equalTo: datePicker.widthAnchor).isActive = true
+        
+        setFollowUpButton.topAnchor.constraint(equalTo: planTextField.bottomAnchor, constant: 30).isActive = true
+        setFollowUpButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        setFollowUpButton.widthAnchor.constraint(equalToConstant: 120).isActive = true
+        setFollowUpButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        
+
         
         setFollowUpButton.addTarget(self, action: #selector(returnToPatientList), for: .touchUpInside)
         planTextField.addTarget(self, action: #selector(savePlan), for: .editingDidEnd)
@@ -112,8 +151,9 @@ class NotificationViewController: UIViewController, UITextFieldDelegate {
             print("Error saving follow up date \(error) ")
         }
         
-        let patientListViewController = navigationController?.viewControllers[0] as! ListTableViewCellController
-        self.navigationController?.popToRootViewController(animated: true)
+        let patientListViewController = navigationController?.viewControllers[1] as! ListTableViewCellController
+        patientListViewController.tableView.reloadData() 
+        navigationController?.popToViewController(patientListViewController, animated: true)
     }
     
     @objc func savePlan() {

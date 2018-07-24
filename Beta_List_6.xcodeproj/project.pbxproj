@@ -15,6 +15,7 @@
 		6816F5E320FE2F8600C6886B /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6816F5E220FE2F8600C6886B /* DetailViewController.swift */; };
 		6816F5E520FE426F00C6886B /* BetaTrendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6816F5E420FE426F00C6886B /* BetaTrendViewController.swift */; };
 		6816F5E720FE7E4100C6886B /* AddPatientViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6816F5E620FE7E4000C6886B /* AddPatientViewController.swift */; };
+		681B0AA32107B1A10055726F /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681B0AA22107B1A10055726F /* LogInViewController.swift */; };
 		68809D79210108F600260113 /* DatabaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68809D78210108F600260113 /* DatabaseController.swift */; };
 		68809D80210111AA00260113 /* Patient+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68809D7A210111AA00260113 /* Patient+CoreDataClass.swift */; };
 		68809D81210111AA00260113 /* Patient+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68809D7B210111AA00260113 /* Patient+CoreDataProperties.swift */; };
@@ -36,6 +37,7 @@
 		6816F5E220FE2F8600C6886B /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		6816F5E420FE426F00C6886B /* BetaTrendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BetaTrendViewController.swift; sourceTree = "<group>"; };
 		6816F5E620FE7E4000C6886B /* AddPatientViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPatientViewController.swift; sourceTree = "<group>"; };
+		681B0AA22107B1A10055726F /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		68809D78210108F600260113 /* DatabaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseController.swift; sourceTree = "<group>"; };
 		68809D7A210111AA00260113 /* Patient+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Patient+CoreDataClass.swift"; sourceTree = "<group>"; };
 		68809D7B210111AA00260113 /* Patient+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Patient+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -96,6 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				6816F5CE20FD56E900C6886B /* ListTableViewCellController.swift */,
+				681B0AA22107B1A10055726F /* LogInViewController.swift */,
 				6816F5E220FE2F8600C6886B /* DetailViewController.swift */,
 				6816F5E420FE426F00C6886B /* BetaTrendViewController.swift */,
 				6816F5E620FE7E4000C6886B /* AddPatientViewController.swift */,
@@ -183,6 +186,7 @@
 				68809D79210108F600260113 /* DatabaseController.swift in Sources */,
 				6816F5CD20FD56E900C6886B /* AppDelegate.swift in Sources */,
 				68809D81210111AA00260113 /* Patient+CoreDataProperties.swift in Sources */,
+				681B0AA32107B1A10055726F /* LogInViewController.swift in Sources */,
 				6816F5E520FE426F00C6886B /* BetaTrendViewController.swift in Sources */,
 				68809D85210111AA00260113 /* Ultrasound+CoreDataProperties.swift in Sources */,
 				68ADF165210531010040F3AA /* NotificationViewController.swift in Sources */,

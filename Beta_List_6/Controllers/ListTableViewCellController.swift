@@ -22,17 +22,19 @@ class ListTableViewCellController: UITableViewController {
     
     let listCell = "ListCell"
     let headerReuseID = "headerID"
-    var managedContext: NSManagedObjectContext!
+    var managedContext: NSManagedObjectContext! {didSet {tableView.reloadData()}}
     
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("YES, the view has loaded")
         managedContext = DatabaseController.context
-        tableView.backgroundColor = .blue
+        tableView.backgroundColor = .white 
         navigationItem.title = "Your Beta List"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.barTintColor = .blue
+        self.navigationItem.setHidesBackButton(true, animated: false)
         let attributes = [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)]
         navigationController?.navigationBar.largeTitleTextAttributes = attributes
         tableView.register(ListTableViewCell.self, forCellReuseIdentifier: listCell)
@@ -43,6 +45,7 @@ class ListTableViewCellController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.isNavigationBarHidden = false
         tableView.estimatedRowHeight = 200
         tableView.rowHeight = UITableViewAutomaticDimension
         let fetchRequest: NSFetchRequest<Patient> = Patient.fetchRequest()
