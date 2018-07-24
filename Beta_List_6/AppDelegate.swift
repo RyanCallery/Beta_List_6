@@ -23,6 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
         application.statusBarStyle = .lightContent
         UNUserNotificationCenter.current().delegate = self
+        UINavigationBar.appearance().tintColor = .white 
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         window?.rootViewController = UINavigationController(rootViewController: ListTableViewCellController())

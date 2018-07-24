@@ -342,6 +342,7 @@ class HistoryOfPresentIllnessCell: BaseTableViewCell, UITextViewDelegate{
     let historyOfPresentIllnessTextView: UITextView = {
         let textView = UITextView()
         textView.text = "History of Present Illness"
+        textView.textColor = .lightGray
         textView.translatesAutoresizingMaskIntoConstraints = false
         return textView
     }()
@@ -351,9 +352,14 @@ class HistoryOfPresentIllnessCell: BaseTableViewCell, UITextViewDelegate{
         addSubview(historyOfPresentIllnessTextView)
         addConstraintsWithFormat(format: "H:|[v0]|", views: historyOfPresentIllnessTextView)
         addConstraintsWithFormat(format: "V:|[v0]|", views: historyOfPresentIllnessTextView)
-//        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0": historyOfPresentIllnessTextView]))
-//        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0": historyOfPresentIllnessTextView]))
+
+    }
+    
+    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+        historyOfPresentIllnessTextView.text = ""
+        historyOfPresentIllnessTextView.textColor = .black
         
+        return true
     }
     func textViewDidEndEditing(_ textView: UITextView) {
         guard let patientInfo = historyOfPresentIllnessTextView.text else {return}

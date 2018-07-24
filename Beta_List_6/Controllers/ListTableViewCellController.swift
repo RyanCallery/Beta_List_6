@@ -21,7 +21,7 @@ class ListTableViewCellController: UITableViewController {
 
     
     let listCell = "ListCell"
-    let footerReuseID = "footerID"
+    let headerReuseID = "headerID"
     var managedContext: NSManagedObjectContext!
     
     
@@ -32,16 +32,19 @@ class ListTableViewCellController: UITableViewController {
         tableView.backgroundColor = .blue
         navigationItem.title = "Your Beta List"
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.barTintColor = .blue 
+        navigationController?.navigationBar.barTintColor = .blue
+        let attributes = [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)]
+        navigationController?.navigationBar.largeTitleTextAttributes = attributes
         tableView.register(ListTableViewCell.self, forCellReuseIdentifier: listCell)
-        tableView.register(Footer.self, forHeaderFooterViewReuseIdentifier: footerReuseID)
+        tableView.register(Header.self, forHeaderFooterViewReuseIdentifier: headerReuseID)
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addPatient))
-        navigationItem.rightBarButtonItem?.tintColor = .white 
-        
+        navigationItem.rightBarButtonItem?.tintColor = .white
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        tableView.estimatedRowHeight = 200
+        tableView.rowHeight = UITableViewAutomaticDimension
         let fetchRequest: NSFetchRequest<Patient> = Patient.fetchRequest()
         do {
             patientList = try managedContext.fetch(fetchRequest)
@@ -70,9 +73,9 @@ class ListTableViewCellController: UITableViewController {
         formatter.dateFormat = "MM dd yy"
         patientListCell.firstNameLabel.text = patientList[indexPath.row].firstName
         patientListCell.lastNameLabel.text = patientList[indexPath.row].lastName 
-        patientListCell.ageLabel.text = patientList[indexPath.row].age
-        patientListCell.parityLabel.text = patientList[indexPath.row].parity
-        patientListCell.gestationalAgeLabel.text = patientList[indexPath.row].gestationalAge
+        patientListCell.ageLabel.text = "\(patientList[indexPath.row].age!) y.o."
+        patientListCell.parityLabel.text = "P\(patientList[indexPath.row].parity!)"
+        patientListCell.gestationalAgeLabel.text = "\(patientList[indexPath.row].gestationalAge!) weeks"
         patientListCell.hpiTextView.text = patientList[indexPath.row].historyOfPresentIllness
         patientListCell.listTableViewController = self
         if patientList[indexPath.row].followUpDate != nil {
@@ -82,11 +85,13 @@ class ListTableViewCellController: UITableViewController {
         return patientListCell
     }
     
-    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: footerReuseID) as! Footer
-        tableView.sectionFooterHeight = 50
-        return footer
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: headerReuseID) as! Header
+        tableView.sectionHeaderHeight = 20
+        header.totalPatientsLabel.text = "Total Patients: \(patientList.count)"
+        return header
     }
+    
     
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let delete = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completion) in
@@ -118,7 +123,7 @@ class ListTableViewCellController: UITableViewController {
     
 
 
-class Footer: UITableViewHeaderFooterView {
+class Header: UITableViewHeaderFooterView {
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
@@ -128,17 +133,28 @@ class Footer: UITableViewHeaderFooterView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-        let footerView: UIView = {
+        let header: UIView = {
        let view = UIView()
-        view.backgroundColor = .red
+        view.backgroundColor = #colorLiteral(red: 1, green: 0.4932718873, blue: 0.4739984274, alpha: 1)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    
+    let totalPatientsLabel: UILabel = {
+       let label = UILabel()
+        label.text = "Total number of patients"
+        label.font = label.font.withSize(12)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
 
     func setupView() {
-        addSubview(footerView)
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0" : footerView]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0": footerView]))
+        addSubview(header)
+        header.addSubview(totalPatientsLabel)
+        header.addConstraintsWithFormat(format: "H:|[v0]|", views: totalPatientsLabel)
+        header.addConstraintsWithFormat(format: "V:|[v0]|", views: totalPatientsLabel)
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0" : header]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0": header]))
     }
 }
 
@@ -159,6 +175,8 @@ class ListTableViewCell: UITableViewCell {
        let label = UILabel()
         label.text = "Jane"
         label.font = UIFont.boldSystemFont(ofSize: 30)
+        label.backgroundColor = .white
+        label.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: UILayoutConstraintAxis.horizontal)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -166,6 +184,7 @@ class ListTableViewCell: UITableViewCell {
     let lastNameLabel: UILabel = {
        let label = UILabel()
         label.text = "Smith"
+        label.backgroundColor = .white
         label.font = UIFont.boldSystemFont(ofSize: 30)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -174,6 +193,8 @@ class ListTableViewCell: UITableViewCell {
     let ageLabel: UILabel = {
         let label = UILabel()
         label.text = "23 yo"
+        label.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: UILayoutConstraintAxis.vertical)
+        label.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: UILayoutConstraintAxis.horizontal)
         label.font = UIFont.systemFont(ofSize: 20)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -182,7 +203,9 @@ class ListTableViewCell: UITableViewCell {
     let parityLabel: UILabel = {
         let label = UILabel()
         label.text = "P1001"
+        label.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: UILayoutConstraintAxis.horizontal)
         label.font = UIFont.systemFont(ofSize: 20)
+        label.backgroundColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -190,15 +213,29 @@ class ListTableViewCell: UITableViewCell {
     let gestationalAgeLabel: UILabel = {
         let label = UILabel()
         label.text = "9 wga"
+        label.backgroundColor = .white
         label.font = UIFont.systemFont(ofSize: 20)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
+    let separatorLine: UIView = {
+       let view = UIView()
+        view.backgroundColor = .black
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    let separatorLineTwo: UIView = {
+        let view = UIView()
+        view.backgroundColor = .black
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     let profileImage: UIImageView = {
        let imageView = UIImageView()
-        imageView.image = #imageLiteral(resourceName: "MeridithGray ")
+        let pictureArray = [#imageLiteral(resourceName: "Tiana"), #imageLiteral(resourceName: "Elsa"), #imageLiteral(resourceName: "Cinderella"), #imageLiteral(resourceName: "Jasmine"), #imageLiteral(resourceName: "Snowwhite"), #imageLiteral(resourceName: "Aurora"), #imageLiteral(resourceName: "Pocahontas"), #imageLiteral(resourceName: "Mulan"), #imageLiteral(resourceName: "Belle"), #imageLiteral(resourceName: "Merida")]
+        imageView.image = pictureArray[Int(arc4random_uniform(UInt32(pictureArray.count - 1)))]
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
         return imageView
@@ -216,6 +253,7 @@ class ListTableViewCell: UITableViewCell {
        let label = UILabel()
         label.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: UILayoutConstraintAxis.horizontal)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.backgroundColor = .lightGray
         label.font = label.font.withSize(12)
         return label
     }()
@@ -224,9 +262,19 @@ class ListTableViewCell: UITableViewCell {
        let textView = UITextView()
         textView.setContentHuggingPriority(UILayoutPriority(rawValue: 250), for: UILayoutConstraintAxis.horizontal)
         textView.text = "Follow up plan"
+        textView.isEditable = false
+        textView.backgroundColor = .lightGray
         textView.font = UIFont.systemFont(ofSize: 15)
         textView.translatesAutoresizingMaskIntoConstraints = false
         return textView
+    }()
+    
+    let arrowLabel: UILabel = {
+       let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "→"
+        label.backgroundColor = .lightGray
+        return label
     }()
     
     func setupViews() {
@@ -236,25 +284,69 @@ class ListTableViewCell: UITableViewCell {
         addSubview(ageLabel)
         addSubview(parityLabel)
         addSubview(gestationalAgeLabel)
+        addSubview(separatorLine)
         addSubview(hpiTextView)
-        
-        let followUpStack = UIStackView(arrangedSubviews: [followUpDateLabel, followUpTextView])
-        followUpStack.translatesAutoresizingMaskIntoConstraints = false
-        followUpStack.axis = .horizontal
-        
-        addSubview(followUpStack)
+        addSubview(separatorLineTwo)
+        addSubview(followUpDateLabel)
+        addSubview(followUpTextView)
+        addSubview(arrowLabel)
         
         
-        addConstraintsWithFormat(format: "H:|-8-[v0(50)]-8-[v1]-8-[v2]", views: profileImage, firstNameLabel, lastNameLabel)
-//        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-8-[v0(50)]-8-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0" : profileImage, "v1": firstNameLabel]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v0]-8-[v1]-8-[v3]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0" : ageLabel, "v1": parityLabel, "v3": gestationalAgeLabel]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0": hpiTextView]))
-        addConstraintsWithFormat(format: "H:|[v0]|", views: followUpStack)
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-8-[v0(50)]-[v1]-[v2(50)]-[v3(50)]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0" : profileImage, "v1" : ageLabel, "v2": hpiTextView, "v3": followUpStack]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-8-[v0(50)]-[v1]-[v2]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0" : profileImage, "v1": parityLabel, "v2": hpiTextView]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-8-[v0(50)]-[v1]-[v2]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0" : profileImage, "v1": gestationalAgeLabel, "v2": hpiTextView]))
+
+        profileImage.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        profileImage.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        profileImage.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        profileImage.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        firstNameLabel.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        firstNameLabel.leftAnchor.constraint(equalTo: profileImage.rightAnchor).isActive = true
+        lastNameLabel.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        lastNameLabel.leftAnchor.constraint(equalTo: firstNameLabel.rightAnchor).isActive = true
+        lastNameLabel.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        lastNameLabel.bottomAnchor.constraint(equalTo: gestationalAgeLabel.topAnchor).isActive = true
+        ageLabel.topAnchor.constraint(equalTo: profileImage.bottomAnchor).isActive = true
+        ageLabel.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        parityLabel.topAnchor.constraint(equalTo: firstNameLabel.bottomAnchor).isActive = true
+        parityLabel.leftAnchor.constraint(equalTo: ageLabel.rightAnchor, constant: 8).isActive = true
+        parityLabel.bottomAnchor.constraint(equalTo: separatorLine.topAnchor).isActive = true
+        parityLabel.rightAnchor.constraint(equalTo: gestationalAgeLabel.leftAnchor, constant: -8).isActive = true
+        gestationalAgeLabel.topAnchor.constraint(equalTo: firstNameLabel.bottomAnchor).isActive = true
+        gestationalAgeLabel.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        gestationalAgeLabel.leftAnchor.constraint(equalTo: parityLabel.rightAnchor).isActive = true
+        gestationalAgeLabel.bottomAnchor.constraint(equalTo: separatorLine.topAnchor).isActive = true
+        separatorLine.topAnchor.constraint(equalTo: ageLabel.bottomAnchor).isActive = true
+        separatorLine.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        separatorLine.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
+        hpiTextView.topAnchor.constraint(equalTo: separatorLine.bottomAnchor).isActive = true
+        hpiTextView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        hpiTextView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        hpiTextView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        separatorLineTwo.topAnchor.constraint(equalTo: hpiTextView.bottomAnchor).isActive = true
+        separatorLineTwo.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        separatorLineTwo.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
+        followUpTextView.topAnchor.constraint(equalTo: separatorLineTwo.bottomAnchor).isActive = true
+        followUpTextView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        followUpTextView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
+        followUpTextView.rightAnchor.constraint(equalTo: arrowLabel.leftAnchor).isActive = true
+        followUpTextView.heightAnchor.constraint(equalToConstant: 50).isActive = true 
+        arrowLabel.topAnchor.constraint(equalTo: separatorLineTwo.bottomAnchor).isActive = true
+        arrowLabel.leftAnchor.constraint(equalTo: followUpTextView.rightAnchor).isActive = true
+        arrowLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
+        followUpDateLabel.topAnchor.constraint(equalTo: separatorLineTwo.bottomAnchor).isActive = true
+        followUpDateLabel.leftAnchor.constraint(equalTo: arrowLabel.rightAnchor).isActive = true
+        followUpDateLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
+        followUpDateLabel.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
         
-//        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0(50)]-[v1]-[v2]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0" : nameLabel, "v1": ageLabel, "v2": hpiTextView]))
+        
+        
+        
+//        followUpDateLabel.topAnchor.constraint(equalTo: separatorLineTwo.bottomAnchor).isActive = true
+//        followUpDateLabel.leftAnchor.constraint(equalTo: followUpTextView.rightAnchor).isActive = true
+//        followUpDateLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8).isActive = true
+//        followUpTextView.topAnchor.constraint(equalTo: separatorLineTwo.bottomAnchor).isActive = true
+//        followUpTextView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+//        followUpTextView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8).isActive = true
+//        followUpTextView.rightAnchor.constraint(equalTo: followUpDateLabel.leftAnchor).isActive = true
+//        followUpTextView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
     }
     
