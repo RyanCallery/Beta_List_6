@@ -1,8 +1,8 @@
 //
-//  AddPatientViewController.swift
+//  EditPatientTableViewController.swift
 //  Beta_List_6
 //
-//  Created by Ryan Callery on 7/17/18.
+//  Created by Ryan Callery on 8/1/18.
 //  Copyright © 2018 Ryan Callery. All rights reserved.
 //
 
@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import UserNotifications
 
-class AddPatientViewController: UITableViewController {
+class EditPatientTableViewController: UITableViewController {
     let firstNameCell = "firstNameCell"
     let lastNameCell = "lastNameCell"
     let medicalRecordNumber = "medicalRecordNumber"
@@ -20,20 +20,20 @@ class AddPatientViewController: UITableViewController {
     let gestationalAge = "gestationalAge"
     let historyOfPresentIllness = "historyOfPresentIllness"
     
-    var managedContext: NSManagedObjectContext! 
+    var managedContext: NSManagedObjectContext!
     
     var patient: Patient?
     override func viewDidLoad() {
         super.viewDidLoad()
-        patient = Patient(context: managedContext)
-        tableView.register(FirstNameCell.self, forCellReuseIdentifier: firstNameCell)
-        tableView.register(LastNameCell.self, forCellReuseIdentifier: lastNameCell)
-        tableView.register(MedicalRecordNumberCell.self, forCellReuseIdentifier: medicalRecordNumber)
-        tableView.register(TelephoneNumberCell.self, forCellReuseIdentifier: telephoneNumber)
-        tableView.register(AgeCell.self, forCellReuseIdentifier: age)
-        tableView.register(ParityCell.self, forCellReuseIdentifier: parity)
-        tableView.register(GestationalAgeCell.self, forCellReuseIdentifier: gestationalAge)
-        tableView.register(HistoryOfPresentIllnessCell.self, forCellReuseIdentifier: historyOfPresentIllness)
+   
+        tableView.register(EditFirstNameCell.self, forCellReuseIdentifier: firstNameCell)
+        tableView.register(EditLastNameCell.self, forCellReuseIdentifier: lastNameCell)
+        tableView.register(EditMedicalRecordNumberCell.self, forCellReuseIdentifier: medicalRecordNumber)
+        tableView.register(EditTelephoneNumberCell.self, forCellReuseIdentifier: telephoneNumber)
+        tableView.register(EditAgeCell.self, forCellReuseIdentifier: age)
+        tableView.register(EditParityCell.self, forCellReuseIdentifier: parity)
+        tableView.register(EditGestationalAgeCell.self, forCellReuseIdentifier: gestationalAge)
+        tableView.register(EditHistoryOfPresentIllnessCell.self, forCellReuseIdentifier: historyOfPresentIllness)
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         tableView.sectionHeaderHeight = 50
         tableView.tableFooterView = UIView()
@@ -46,9 +46,9 @@ class AddPatientViewController: UITableViewController {
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         tableView.addGestureRecognizer(tapGesture)
-       
         
-      
+        
+        
     }
     @objc func hideKeyboard() {
         tableView.endEditing(true)
@@ -62,9 +62,10 @@ class AddPatientViewController: UITableViewController {
             fatalError("Unable to save patient to database")
         }
         let patientListViewController = navigationController?.viewControllers[1] as! ListTableViewCellController
-        patientListViewController.patient = self.patient 
+//        patientListViewController.patient = self.patient
+        patientListViewController.tableView.reloadData()
         navigationController?.popToViewController(patientListViewController, animated: true)
-
+        
     }
     
     ///  Mark: TableView Data Source and Delegate Methods
@@ -84,34 +85,34 @@ class AddPatientViewController: UITableViewController {
         switch indexPath.section {
         case 0:
             switch indexPath.row {
-            case 0: let cell = tableView.dequeueReusableCell(withIdentifier: firstNameCell, for: indexPath) as! FirstNameCell
-                cell.addPatientViewController = self
-                return cell 
-            case 1: let cell = tableView.dequeueReusableCell(withIdentifier: lastNameCell, for: indexPath) as! LastNameCell
-                cell.addPatientViewController = self
-                return cell
-            case 2: let cell = tableView.dequeueReusableCell(withIdentifier: medicalRecordNumber, for: indexPath) as! MedicalRecordNumberCell
-                cell.addPatientViewController = self
-                return cell
-            case 3: let cell = tableView.dequeueReusableCell(withIdentifier: telephoneNumber, for: indexPath) as! TelephoneNumberCell
-                cell.addPatientViewController = self
-                return cell
+            case 0: let cell = tableView.dequeueReusableCell(withIdentifier: firstNameCell, for: indexPath) as! EditFirstNameCell
+            cell.editPatientViewController = self
+            return cell
+            case 1: let cell = tableView.dequeueReusableCell(withIdentifier: lastNameCell, for: indexPath) as! EditLastNameCell
+            cell.editPatientViewController = self
+            return cell
+            case 2: let cell = tableView.dequeueReusableCell(withIdentifier: medicalRecordNumber, for: indexPath) as! EditMedicalRecordNumberCell
+            cell.editPatientViewController = self
+            return cell
+            case 3: let cell = tableView.dequeueReusableCell(withIdentifier: telephoneNumber, for: indexPath) as! EditTelephoneNumberCell
+            cell.editPatientViewController = self
+            return cell
             default: fatalError("Only 4 cells")
             }
         case 1:
             switch indexPath.row {
-            case 0: let cell = tableView.dequeueReusableCell(withIdentifier: age, for: indexPath) as! AgeCell
-                cell.addPatientViewController = self
-                return cell
-            case 1: let cell = tableView.dequeueReusableCell(withIdentifier: parity, for: indexPath) as! ParityCell
-                cell.addPatientViewController = self
-                return cell
-            case 2: let cell = tableView.dequeueReusableCell(withIdentifier: gestationalAge, for: indexPath) as! GestationalAgeCell
-                cell.addPatientViewController = self
-                return cell
-            case 3: let cell = tableView.dequeueReusableCell(withIdentifier: historyOfPresentIllness, for: indexPath) as! HistoryOfPresentIllnessCell
-                cell.addPatientViewController = self
-                return cell
+            case 0: let cell = tableView.dequeueReusableCell(withIdentifier: age, for: indexPath) as! EditAgeCell
+            cell.editPatientViewController = self
+            return cell
+            case 1: let cell = tableView.dequeueReusableCell(withIdentifier: parity, for: indexPath) as! EditParityCell
+            cell.editPatientViewController = self
+            return cell
+            case 2: let cell = tableView.dequeueReusableCell(withIdentifier: gestationalAge, for: indexPath) as! EditGestationalAgeCell
+            cell.editPatientViewController = self
+            return cell
+            case 3: let cell = tableView.dequeueReusableCell(withIdentifier: historyOfPresentIllness, for: indexPath) as! EditHistoryOfPresentIllnessCell
+            cell.editPatientViewController = self
+            return cell
             default: fatalError("only 4 rows exist")
             }
         default:
@@ -128,7 +129,7 @@ class AddPatientViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50 
+        return 50
     }
     
     func saveFirstName (_ patientInfo: String){
@@ -141,7 +142,7 @@ class AddPatientViewController: UITableViewController {
     }
     func saveMRN (_ patientInfo: String){
         patient?.medicalRecordNumber = patientInfo
-      
+        
     }
     func saveTelephoneNumber (_ patientInfo: String){
         patient?.telephoneNumber = patientInfo
@@ -161,21 +162,21 @@ class AddPatientViewController: UITableViewController {
     }
     func saveHPI (_ patientInfo: String){
         patient?.historyOfPresentIllness = patientInfo
-       
+        
     }
-
+    
     
 }
-extension AddPatientViewController: UITextFieldDelegate{
+extension EditPatientTableViewController: UITextFieldDelegate{
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
 }
 
-class FirstNameCell: BaseTableViewCell{
+class EditFirstNameCell: EditBaseTableViewCell{
     
-    var addPatientViewController: AddPatientViewController?
+    var editPatientViewController: EditPatientTableViewController?
     
     let firstNametTextField: UITextField = {
         let textField = UITextField()
@@ -197,7 +198,11 @@ class FirstNameCell: BaseTableViewCell{
     
     @objc func saveInfo() {
         guard let patientInfo = firstNametTextField.text else {return}
-        addPatientViewController?.saveFirstName(patientInfo)
+        if patientInfo == "" {
+            return
+        } else {
+        editPatientViewController?.saveFirstName(patientInfo)
+        }
     }
     override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -205,9 +210,9 @@ class FirstNameCell: BaseTableViewCell{
     }
     
 }
-class LastNameCell: BaseTableViewCell {
+class EditLastNameCell: EditBaseTableViewCell {
     
-    var addPatientViewController: AddPatientViewController?
+    var editPatientViewController: EditPatientTableViewController?
     
     let lastNameTextField: UITextField = {
         let textField = UITextField()
@@ -226,8 +231,12 @@ class LastNameCell: BaseTableViewCell {
     }
     @objc func saveInfo() {
         guard let patientInfo = lastNameTextField.text else {return}
-        addPatientViewController?.saveLastName(patientInfo)
+        if patientInfo == "" {
+            return
+        } else {
+        editPatientViewController?.saveLastName(patientInfo)
         }
+    }
     
     override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -235,8 +244,8 @@ class LastNameCell: BaseTableViewCell {
     }
     
 }
-class MedicalRecordNumberCell: BaseTableViewCell{
-    var addPatientViewController: AddPatientViewController?
+class EditMedicalRecordNumberCell: EditBaseTableViewCell{
+    var editPatientViewController: EditPatientTableViewController?
     
     let medicalRecordNumberTextField: UITextField = {
         let textField = UITextField()
@@ -255,7 +264,11 @@ class MedicalRecordNumberCell: BaseTableViewCell{
     }
     @objc func saveInfo() {
         guard let patientInfo = medicalRecordNumberTextField.text else {return}
-        addPatientViewController?.saveMRN(patientInfo)
+        if patientInfo == "" {
+            return
+        } else {
+        editPatientViewController?.saveMRN(patientInfo)
+        }
     }
     override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -263,12 +276,12 @@ class MedicalRecordNumberCell: BaseTableViewCell{
     }
     
 }
-class TelephoneNumberCell: BaseTableViewCell{
-    var addPatientViewController: AddPatientViewController?
+class EditTelephoneNumberCell: EditBaseTableViewCell{
+    var editPatientViewController: EditPatientTableViewController?
     let telephoneNumberTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Telephone Number"
-        textField.keyboardType = .numberPad 
+        textField.keyboardType = .numberPad
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -282,7 +295,11 @@ class TelephoneNumberCell: BaseTableViewCell{
     }
     @objc func saveInfo() {
         guard let patientInfo = telephoneNumberTextField.text else {return}
-        addPatientViewController?.saveTelephoneNumber(patientInfo)
+        if patientInfo == "" {
+            return
+        } else {
+        editPatientViewController?.saveTelephoneNumber(patientInfo)
+        }
     }
     override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -290,8 +307,8 @@ class TelephoneNumberCell: BaseTableViewCell{
     }
     
 }
-class AgeCell: BaseTableViewCell{
-    var addPatientViewController: AddPatientViewController?
+class EditAgeCell: EditBaseTableViewCell{
+    var editPatientViewController: EditPatientTableViewController?
     let ageTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Age"
@@ -310,7 +327,11 @@ class AgeCell: BaseTableViewCell{
     
     @objc func saveInfo() {
         guard let patientInfo = ageTextField.text else {return}
-        addPatientViewController?.saveAge(patientInfo)
+        if patientInfo == "" {
+            return
+        } else {
+        editPatientViewController?.saveAge(patientInfo)
+        }
     }
     override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -318,8 +339,8 @@ class AgeCell: BaseTableViewCell{
     }
     
 }
-class ParityCell: BaseTableViewCell{
-    var addPatientViewController: AddPatientViewController?
+class EditParityCell: EditBaseTableViewCell{
+    var editPatientViewController: EditPatientTableViewController?
     let parityTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Parity"
@@ -338,7 +359,11 @@ class ParityCell: BaseTableViewCell{
     }
     @objc func saveInfo() {
         guard let patientInfo = parityTextField.text else {return}
-        addPatientViewController?.saveParity(patientInfo)
+        if patientInfo == "" {
+            return
+        } else {
+        editPatientViewController?.saveParity(patientInfo)
+        }
     }
     
     override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -347,12 +372,12 @@ class ParityCell: BaseTableViewCell{
     }
     
 }
-class GestationalAgeCell: BaseTableViewCell{
-    var addPatientViewController: AddPatientViewController?
+class EditGestationalAgeCell: EditBaseTableViewCell{
+    var editPatientViewController: EditPatientTableViewController?
     let gestationalAgeTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Gestational Age"
-        textField.keyboardType = .numberPad 
+        textField.keyboardType = .numberPad
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -367,7 +392,11 @@ class GestationalAgeCell: BaseTableViewCell{
     }
     @objc func saveInfo() {
         guard let patientInfo = gestationalAgeTextField.text else {return}
-        addPatientViewController?.saveGestationalAge(patientInfo)
+        if patientInfo == "" {
+            return
+        } else {
+        editPatientViewController?.saveGestationalAge(patientInfo)
+        }
     }
     override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -375,8 +404,8 @@ class GestationalAgeCell: BaseTableViewCell{
     }
     
 }
-class HistoryOfPresentIllnessCell: BaseTableViewCell, UITextViewDelegate{
-    var addPatientViewController: AddPatientViewController?
+class EditHistoryOfPresentIllnessCell: EditBaseTableViewCell, UITextViewDelegate{
+    var editPatientViewController: EditPatientTableViewController?
     let historyOfPresentIllnessTextView: UITextView = {
         let textView = UITextView()
         textView.text = "History of Present Illness"
@@ -386,11 +415,11 @@ class HistoryOfPresentIllnessCell: BaseTableViewCell, UITextViewDelegate{
     }()
     
     override func setupViews() {
-        historyOfPresentIllnessTextView.delegate = self 
+        historyOfPresentIllnessTextView.delegate = self
         addSubview(historyOfPresentIllnessTextView)
         addConstraintsWithFormat(format: "H:|[v0]|", views: historyOfPresentIllnessTextView)
         addConstraintsWithFormat(format: "V:|[v0]|", views: historyOfPresentIllnessTextView)
-
+        
     }
     
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
@@ -402,11 +431,15 @@ class HistoryOfPresentIllnessCell: BaseTableViewCell, UITextViewDelegate{
     func textViewDidEndEditing(_ textView: UITextView) {
         textView.resignFirstResponder()
         guard let patientInfo = historyOfPresentIllnessTextView.text else {return}
-        addPatientViewController?.saveHPI(patientInfo)
+        if patientInfo == "" {
+            return
+        } else {
+        editPatientViewController?.saveHPI(patientInfo)
+        }
     }
 }
 
-class BaseTableViewCell: UITableViewCell, UITextFieldDelegate{
+class EditBaseTableViewCell: UITableViewCell, UITextFieldDelegate{
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -426,17 +459,5 @@ class BaseTableViewCell: UITableViewCell, UITextFieldDelegate{
         return true
     }
 }
-
-extension UIView {
-    func addConstraintsWithFormat(format: String, views: UIView...){
-        var viewsDictionary = [String: UIView]()
-        for (index, view) in views.enumerated() {
-            let key = "v\(index)"
-            viewsDictionary[key] = view
-        }
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: format, options: NSLayoutFormatOptions(), metrics: nil, views: viewsDictionary))
-    }
-}
-
 
 

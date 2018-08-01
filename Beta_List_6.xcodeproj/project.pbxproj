@@ -16,6 +16,7 @@
 		6816F5E520FE426F00C6886B /* BetaTrendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6816F5E420FE426F00C6886B /* BetaTrendViewController.swift */; };
 		6816F5E720FE7E4100C6886B /* AddPatientViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6816F5E620FE7E4000C6886B /* AddPatientViewController.swift */; };
 		681B0AA32107B1A10055726F /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681B0AA22107B1A10055726F /* LogInViewController.swift */; };
+		68487E8D21117AB5001272BC /* EditPatientTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68487E8C21117AB5001272BC /* EditPatientTableViewController.swift */; };
 		68809D79210108F600260113 /* DatabaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68809D78210108F600260113 /* DatabaseController.swift */; };
 		68809D80210111AA00260113 /* Patient+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68809D7A210111AA00260113 /* Patient+CoreDataClass.swift */; };
 		68809D81210111AA00260113 /* Patient+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68809D7B210111AA00260113 /* Patient+CoreDataProperties.swift */; };
@@ -38,6 +39,7 @@
 		6816F5E420FE426F00C6886B /* BetaTrendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BetaTrendViewController.swift; sourceTree = "<group>"; };
 		6816F5E620FE7E4000C6886B /* AddPatientViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPatientViewController.swift; sourceTree = "<group>"; };
 		681B0AA22107B1A10055726F /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
+		68487E8C21117AB5001272BC /* EditPatientTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPatientTableViewController.swift; sourceTree = "<group>"; };
 		68809D78210108F600260113 /* DatabaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseController.swift; sourceTree = "<group>"; };
 		68809D7A210111AA00260113 /* Patient+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Patient+CoreDataClass.swift"; sourceTree = "<group>"; };
 		68809D7B210111AA00260113 /* Patient+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Patient+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 				6816F5E620FE7E4000C6886B /* AddPatientViewController.swift */,
 				68809D78210108F600260113 /* DatabaseController.swift */,
 				68ADF164210531010040F3AA /* NotificationViewController.swift */,
+				68487E8C21117AB5001272BC /* EditPatientTableViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -179,6 +182,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				68809D82210111AA00260113 /* Hcg+CoreDataClass.swift in Sources */,
+				68487E8D21117AB5001272BC /* EditPatientTableViewController.swift in Sources */,
 				6816F5E720FE7E4100C6886B /* AddPatientViewController.swift in Sources */,
 				6816F5CF20FD56E900C6886B /* ListTableViewCellController.swift in Sources */,
 				68809D83210111AA00260113 /* Hcg+CoreDataProperties.swift in Sources */,

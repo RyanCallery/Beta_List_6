@@ -28,19 +28,37 @@ class ListTableViewCellController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("YES, the view has loaded")
         managedContext = DatabaseController.context
         tableView.backgroundColor = .white 
         navigationItem.title = "Your Beta List"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.barTintColor = .blue
-        self.navigationItem.setHidesBackButton(true, animated: false)
+        self.navigationItem.setHidesBackButton(true, animated: false
+        )
         let attributes = [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)]
         navigationController?.navigationBar.largeTitleTextAttributes = attributes
         tableView.register(ListTableViewCell.self, forCellReuseIdentifier: listCell)
         tableView.register(Header.self, forHeaderFooterViewReuseIdentifier: headerReuseID)
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addPatient))
         navigationItem.rightBarButtonItem?.tintColor = .white
+        setupEditGesture()
+    }
+    
+    private func setupEditGesture() {
+        self.tableView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress)))
+    }
+    
+    @objc func handleLongPress(gesture: UILongPressGestureRecognizer) {
+        if gesture.state == .ended {
+            let touchPoint = gesture.location(in: self.tableView)
+            if let indexPath = self.tableView.indexPathForRow(at: touchPoint) {
+        print("long press tapped", Date(), indexPath)
+                let controller = EditPatientTableViewController()
+                controller.managedContext = managedContext
+                controller.patient = patientList[indexPath.row]
+                navigationController?.pushViewController(controller, animated: true)
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -74,15 +92,34 @@ class ListTableViewCellController: UITableViewController {
         let patientListCell = tableView.dequeueReusableCell(withIdentifier: listCell, for: indexPath) as!  ListTableViewCell
         let formatter = DateFormatter()
         formatter.dateFormat = "MM dd yy"
-        patientListCell.firstNameLabel.text = patientList[indexPath.row].firstName
-        patientListCell.lastNameLabel.text = patientList[indexPath.row].lastName 
+        if patientList[indexPath.row].firstName != nil {
+            patientListCell.firstNameLabel.text = "\(patientList[indexPath.row].firstName ?? "") "
+        }
+        patientListCell.lastNameLabel.text = patientList[indexPath.row].lastName
+        if patientList[indexPath.row].age != nil {
         patientListCell.ageLabel.text = "\(patientList[indexPath.row].age!) y.o."
+        } else {
+            patientListCell.ageLabel.text = ""
+        }
+        if patientList[indexPath.row].parity != nil {
         patientListCell.parityLabel.text = "P\(patientList[indexPath.row].parity!)"
+        } else {
+            patientListCell.parityLabel.text = ""
+        }
+        if patientList[indexPath.row].gestationalAge != nil {
         patientListCell.gestationalAgeLabel.text = "\(patientList[indexPath.row].gestationalAge!) weeks"
+        } else {
+            patientListCell.gestationalAgeLabel.text = ""
+        }
         patientListCell.hpiTextView.text = patientList[indexPath.row].historyOfPresentIllness
         patientListCell.listTableViewController = self
         if patientList[indexPath.row].followUpDate != nil {
         patientListCell.followUpDateLabel.text = formatter.string(from: patientList[indexPath.row].followUpDate! as Date)
+        }
+        if patientList[indexPath.row].followUpDate == nil {
+            patientListCell.arrowLabel.text = ""
+        } else {
+            patientListCell.arrowLabel.text = "→"
         }
         patientListCell.followUpTextView.text = patientList[indexPath.row].followUpPlan
         return patientListCell
@@ -338,18 +375,6 @@ class ListTableViewCell: UITableViewCell {
         followUpDateLabel.leftAnchor.constraint(equalTo: arrowLabel.rightAnchor).isActive = true
         followUpDateLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
         followUpDateLabel.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        
-        
-        
-        
-//        followUpDateLabel.topAnchor.constraint(equalTo: separatorLineTwo.bottomAnchor).isActive = true
-//        followUpDateLabel.leftAnchor.constraint(equalTo: followUpTextView.rightAnchor).isActive = true
-//        followUpDateLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8).isActive = true
-//        followUpTextView.topAnchor.constraint(equalTo: separatorLineTwo.bottomAnchor).isActive = true
-//        followUpTextView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
-//        followUpTextView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8).isActive = true
-//        followUpTextView.rightAnchor.constraint(equalTo: followUpDateLabel.leftAnchor).isActive = true
-//        followUpTextView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
     }
     

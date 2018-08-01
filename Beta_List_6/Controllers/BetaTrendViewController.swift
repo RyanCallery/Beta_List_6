@@ -81,13 +81,13 @@ class BetaTrendViewController: UICollectionViewController, UICollectionViewDeleg
             let doubleArray = betaLevelsOnlyArray.map{beta in Double(beta)!}
             for index in 0...doubleArray.count - 2 {
             // calcultate the percent change between interval beta levels
-                print("Is the percent change function working")
                 let increase = doubleArray[index + 1] - doubleArray[index]
                 let percentIncrease = (increase / doubleArray[index]) * 100
                 percentIncreaseArray.append(percentIncrease)
             }
             // truncate the interval change so it doesn't have any decimal places for the view
             let truncatedArray = percentIncreaseArray.map{beta in beta.truncate(places: 0, number: beta)}
+            print("this is the truncated array: \(truncatedArray) ")
             let truncatedArrayAsString = truncatedArray.map{beta in String(beta)}
             percentIncreaseStringArray.append(contentsOf: truncatedArrayAsString)
             
@@ -105,7 +105,6 @@ class BetaTrendViewController: UICollectionViewController, UICollectionViewDeleg
             dateFormatter.dateFormat = "h:mm a"
             for index in 0...date.count - 2 {
             let eachDateInterval = date[index + 1].hours(from: date[index])
-                print("is the date interval calc func working")
                 if eachDateInterval > 48 {
                     dateFormatter.dateFormat = "d"
                 } else {
@@ -135,7 +134,14 @@ class BetaTrendViewController: UICollectionViewController, UICollectionViewDeleg
         formatter.dateFormat = "M.d.yy"
         hourFormatter.dateFormat = "h:mm a"
         let betaObject = patient?.hcg?.object(at: indexPath.item) as! Hcg
+        if betaObject.methotrexate == true {
+            cell.dateLabel.backgroundColor = .yellow
+            cell.timeLabel.backgroundColor = .yellow 
+        }
         cell.betaLabel.text = betaObject.hcgLevel
+        if betaObject.hcgLevel?.count == 6 {
+            cell.betaLabel.font = cell.betaLabel.font.withSize(20)
+        }
         cell.dateLabel.text = formatter.string(from: betaObject.date! as Date)
         cell.timeLabel.text = hourFormatter.string(from: betaObject.date! as Date)
         if dateInterval[indexPath.item] != "" {
@@ -212,7 +218,10 @@ class BetaTrendCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.text = "Beta"
         label.backgroundColor = #colorLiteral(red: 1, green: 0.4932718873, blue: 0.4739984274, alpha: 1)
-        label.font = label.font.withSize(40)
+        label.font = label.font.withSize(25)
+        label.adjustsFontSizeToFitWidth = true
+        label.numberOfLines = 1
+        label.minimumScaleFactor = 0.1 
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -283,7 +292,7 @@ class BetaTrendCollectionViewCell: UICollectionViewCell {
     let viewForThePercentChangeLabel: UIView = {
        let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 25
+        view.layer.cornerRadius = 30
         view.layer.masksToBounds = true
         view.backgroundColor = #colorLiteral(red: 1, green: 0.4932718873, blue: 0.4739984274, alpha: 1)
         return view
@@ -292,6 +301,9 @@ class BetaTrendCollectionViewCell: UICollectionViewCell {
     func setupViews() {
         addSubview(dateView)
         addSubview(betaView)
+        
+        
+        
         dateView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         dateView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         dateView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.5).isActive = true
@@ -332,8 +344,8 @@ class BetaTrendCollectionViewCell: UICollectionViewCell {
         viewForBetaValue.widthAnchor.constraint(equalToConstant: 80).isActive = true
         viewForThePercentChangeLabel.leftAnchor.constraint(equalTo: viewForBetaValue.rightAnchor, constant: 10).isActive = true
         viewForThePercentChangeLabel.bottomAnchor.constraint(equalTo: viewForBetaValue.bottomAnchor).isActive = true
-        viewForThePercentChangeLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        viewForThePercentChangeLabel.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        viewForThePercentChangeLabel.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        viewForThePercentChangeLabel.widthAnchor.constraint(equalToConstant: 60).isActive = true
         
         viewForBetaValue.addSubview(betaLabel)
         viewForThePercentChangeLabel.addSubview(percentChangeLabel)
@@ -364,20 +376,7 @@ class BetaTrendCollectionViewCell: UICollectionViewCell {
         arrowLabel.bottomAnchor.constraint(equalTo: arrowView.bottomAnchor).isActive = true
         
         
-//        addSubview(dateLabel)
-//        addSubview(betaLabel)
-//        addSubview(dateIntervalLabel)
-//        addSubview(percentChangeLabel)
-//
-//
-//
-//        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[v0(100)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0": dateLabel]))
-//        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[v0(100)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0": dateIntervalLabel]))
-//        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[v0]-8-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0": dateLabel, "v1": dateIntervalLabel  ]))
-//        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0(100)]-12-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0": betaLabel]))
-//        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[v0]-8-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0": betaLabel, "v1": percentChangeLabel]))
-//        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0(100)]-12-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0": percentChangeLabel]))
-//
+
     }
     
     
@@ -396,3 +395,4 @@ extension Date {
     }
     
 }
+

@@ -30,7 +30,7 @@ class DetailViewController: UIViewController, UICollectionViewDelegateFlowLayout
         layout.scrollDirection = .horizontal
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collection.backgroundColor = .lightGray
-        collection.isPagingEnabled = true
+        collection.isPagingEnabled = false
         collection.translatesAutoresizingMaskIntoConstraints = false
         return collection
     }()
@@ -187,6 +187,170 @@ class DetailViewController: UIViewController, UICollectionViewDelegateFlowLayout
         sonoCollectionView.register(SonoCollectionViewCell.self, forCellWithReuseIdentifier: sonoID)
         followUpButton.addTarget(self, action: #selector(segueToFollowUpView), for: .touchUpInside)
         setupStack()
+        setUpBetaGesture()
+        setUpSonoGesture()
+    }
+    
+    func setUpBetaGesture() {
+        self.betaCollectionView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress)))
+    }
+    
+    @objc func handleLongPress(gesture: UILongPressGestureRecognizer){
+        if gesture.state == .ended {
+            let touchPoint = gesture.location(in: self.betaCollectionView)
+            if let indexPath = self.betaCollectionView.indexPathForItem(at: touchPoint) {
+        
+                let actionSheet = UIAlertController(title: nil, message: "What would you like to do", preferredStyle: .actionSheet)
+                let edit = UIAlertAction(title: "Edit Beta", style: .default) { (action) in
+                    //implement the edit action
+                    
+                    let alert = UIAlertController(title: "Edit Beta", message: nil, preferredStyle: .alert)
+                    alert.addTextField(configurationHandler: {(textField) in
+                        textField.placeholder = "HCG"
+                        textField.keyboardType = .numberPad
+                    })
+                    let saveAction = UIAlertAction(title: "Save", style: .default, handler: {(action) in
+                        
+                        if let hcgText = alert.textFields?.first?.text {
+                            let betaObject = self.patient?.hcg?.object(at: indexPath.item) as! Hcg
+                            betaObject.hcgLevel = hcgText
+                            self.patient?.replaceHcg(at: indexPath.item, with: betaObject)
+                            do {
+                                try self.managedContext.save()
+                                self.betaCollectionView.reloadData()
+                                
+                            } catch {
+                                fatalError("Unable to save HCG value")
+                            }
+                            
+                        } else {
+                            return
+                        }
+                    })
+                    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {(action) in
+                    })
+                    alert.addAction(saveAction)
+                    alert.addAction(cancelAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+                let delete = UIAlertAction(title: "Delete Beta", style: .destructive) { (action) in
+                    // implement delete beta
+//                    let deletedBeta = self.patient?.hcg?.object(at: indexPath.item) as! Hcg
+                    self.patient?.removeFromHcg(at: indexPath.item)
+                    do {
+                        try self.managedContext.save()
+                    } catch {
+                        fatalError("Unable to delete beta level")
+                    }
+                    self.betaCollectionView.deleteItems(at: [indexPath])
+                }
+                let addMtx = UIAlertAction(title: "Add Mtx", style: .default) { (action) in
+                    // implement addition of Mtx
+                    
+                    let betaObject = self.patient?.hcg?.object(at: indexPath.item) as! Hcg
+                    let hcg = Hcg(context: self.managedContext)
+                    hcg.hcgLevel = betaObject.hcgLevel
+                    hcg.date = betaObject.date
+                    hcg.methotrexate = true
+                    self.patient?.replaceHcg(at: indexPath.item, with: hcg)
+                    
+                               do {
+                                    try self.managedContext.save()
+                               }catch {
+                                    fatalError("Unable to save updated mtx input")
+                                }
+                    self.betaCollectionView.reloadData()
+                    
+                            }
+                    
+                
+                let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                actionSheet.addAction(addMtx)
+                actionSheet.addAction(edit)
+                actionSheet.addAction(delete)
+                actionSheet.addAction(cancel)
+                present(actionSheet, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    func setUpSonoGesture() {
+        self.sonoCollectionView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressSono)))
+    }
+    
+    @objc func handleLongPressSono(gesture: UILongPressGestureRecognizer) {
+        if gesture.state == .ended {
+            let touchPoint = gesture.location(in: self.sonoCollectionView)
+            if let indexPath = self.sonoCollectionView.indexPathForItem(at: touchPoint) {
+                let actionSheet = UIAlertController(title: nil, message: "What would you like to do", preferredStyle: .actionSheet)
+                let edit = UIAlertAction(title: "Edit Sono", style: .default) { (action) in
+                    
+                
+                let alert = UIAlertController(title: "Edit Ultrasound", message: nil, preferredStyle: .alert)
+                alert.addTextField(configurationHandler: {(textField) in
+                    textField.placeholder = "Uterus"
+                })
+                alert.addTextField(configurationHandler: {(textField) in
+                    textField.placeholder = "Left Ovary"
+                })
+                alert.addTextField(configurationHandler: {(textField) in
+                    textField.placeholder = "Right Ovary"
+                })
+                alert.addTextField(configurationHandler: {(textField) in
+                    textField.placeholder = "Free fluid"
+                })
+                let saveAction = UIAlertAction(title: "Save", style: .default, handler: {(action) in
+                  
+                    let sonoObject = self.patient?.ultrasound?.object(at: indexPath.item) as! Ultrasound
+                    if let uterusText = alert.textFields?.first?.text {
+                        sonoObject.uterus = uterusText
+                    }
+                    if let leftOvaryText = alert.textFields![1].text {
+                        sonoObject.leftOvary = leftOvaryText
+                    }
+                    if let rightOvaryText = alert.textFields![2].text {
+                        sonoObject.rightOvary = rightOvaryText
+                    }
+                    if let fluidText = alert.textFields![3].text {
+                        sonoObject.fluid = fluidText
+                    }
+                    do {
+                        self.patient?.replaceUltrasound(at: indexPath.item, with: sonoObject)
+                        try self.managedContext.save()
+                        self.sonoCollectionView.reloadData()
+                        
+                    }
+                    catch {
+                        fatalError("Unable to save ultrasound value")
+                    }
+                    
+                })
+                
+                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {(action) in
+                    print("Cancel sono")
+                })
+                alert.addAction(saveAction)
+                alert.addAction(cancelAction)
+                self.present(alert, animated: true, completion: nil)
+            }
+            
+            let delete = UIAlertAction(title: "Delete Sono", style: .destructive) { (action) in
+                    // implement delete sono
+                    self.patient?.removeFromUltrasound(at: indexPath.item)
+                    do {
+                        try self.managedContext.save()
+                    } catch {
+                        fatalError("Unable to delete beta level")
+                    }
+                    self.sonoCollectionView.deleteItems(at: [indexPath])
+                }
+                let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                actionSheet.addAction(edit)
+                actionSheet.addAction(delete)
+                actionSheet.addAction(cancel)
+                present(actionSheet, animated: true, completion: nil)
+            }
+        }
     }
     
     @objc func segueToFollowUpView(){
@@ -216,13 +380,12 @@ class DetailViewController: UIViewController, UICollectionViewDelegateFlowLayout
     }
     
     @objc func addBeta() {
-        print("beta hcg added")
         let alert = UIAlertController(title: "Add New Beta", message: nil, preferredStyle: .alert)
         alert.addTextField(configurationHandler: {(textField) in
             textField.placeholder = "HCG"
+            textField.keyboardType = .numberPad 
         })
         let saveAction = UIAlertAction(title: "Save", style: .default, handler: {(action) in
-            print("Saved beta")
             
             if let hcgText = alert.textFields?.first?.text {
                 let date = Date()
@@ -244,7 +407,6 @@ class DetailViewController: UIViewController, UICollectionViewDelegateFlowLayout
             }
         })
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {(action) in
-            print("Cancel beta")
         })
         alert.addAction(saveAction)
         alert.addAction(cancelAction)
@@ -375,8 +537,7 @@ class DetailViewController: UIViewController, UICollectionViewDelegateFlowLayout
         let betaTrendButtonView = UIView()
         betaTrendButtonView.translatesAutoresizingMaskIntoConstraints = false
         betaTrendButtonView.backgroundColor = .lightGray
-//        betaTrendButtonView.layer.borderColor = UIColor.black.cgColor
-//        betaTrendButtonView.layer.borderWidth = 1
+
         betaTrendButtonView.addSubview(betaTrendButton)
         betaTrendButton.centerXAnchor.constraint(equalTo: betaTrendButtonView.centerXAnchor).isActive = true
         betaTrendButton.centerYAnchor.constraint(equalTo: betaTrendButtonView.centerYAnchor).isActive = true
@@ -449,6 +610,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
         if collectionView == betaCollectionView {
         let betaCell = collectionView.dequeueReusableCell(withReuseIdentifier: betaID, for: indexPath) as! BetaCollectionViewCell
             let betaObject = patient?.hcg?.object(at: indexPath.item) as! Hcg
+            print("the mtx status is: \(betaObject.methotrexate) at \(indexPath.item) ")
             let dateFormatter = DateFormatter()
             let timeFormatter = DateFormatter()
             dateFormatter.dateFormat = "M.d"
@@ -475,19 +637,19 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView == betaCollectionView {
-            let betaObject = patient?.hcg?.object(at: indexPath.item) as! Hcg
-            betaObject.methotrexate = true
-            patient?.replaceHcg(at: indexPath.item, with: betaObject)
-            do {
-                try self.managedContext.save()
-            }catch {
-                fatalError("Unable to save updated mtx input")
-            }
-            betaCollectionView.reloadData()
-        }
-    }
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        if collectionView == betaCollectionView {
+//            let betaObject = patient?.hcg?.object(at: indexPath.item) as! Hcg
+//            betaObject.methotrexate = true
+//            patient?.replaceHcg(at: indexPath.item, with: betaObject)
+//            do {
+//                try self.managedContext.save()
+//            }catch {
+//                fatalError("Unable to save updated mtx input")
+//            }
+//            betaCollectionView.reloadData()
+//        }
+//    }
     
 class BetaCollectionViewCell: BaseCollectionViewCell {
     
@@ -509,7 +671,10 @@ class BetaCollectionViewCell: BaseCollectionViewCell {
     let betaLabel: UILabel = {
        let label = UILabel()
         label.text = "beta"
-        label.font = label.font.withSize(35)
+        label.font = label.font.withSize(30)
+        label.minimumScaleFactor = 0.1
+        label.adjustsFontSizeToFitWidth = true
+        label.numberOfLines = 1
         label.layer.cornerRadius = 30
         label.layer.borderWidth = 0.5
         label.layer.borderColor = UIColor.black.cgColor

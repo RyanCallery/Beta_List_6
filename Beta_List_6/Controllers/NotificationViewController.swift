@@ -135,20 +135,29 @@ class NotificationViewController: UIViewController, UITextFieldDelegate {
     @objc func returnToPatientList() {
         
         let followUpNotification = UNMutableNotificationContent()
-        followUpNotification.title = "Follow up for \(String(describing: patient.firstName)) \(String(describing: patient.lastName))"
-        followUpNotification.body = "Scheduled for \(patient.followUpPlan!))"
+        if patient.firstName != nil && patient.lastName != nil {
+        followUpNotification.title = "Follow up for \(String(describing: patient.firstName!)) \(String(describing: patient.lastName!))"
+        } else {
+            followUpNotification.title = "Follow up for beta list patient"
+        }
+        if patient.followUpPlan != nil {
+            followUpNotification.body = "Scheduled for \(patient.followUpPlan!)"
+        } else {
+            followUpNotification.body = ""
+        }
         followUpNotification.sound = UNNotificationSound.default()
         
         let calendar = Calendar.current
+        if patient.followUpDate != nil {
         let components = calendar.dateComponents([.hour,.minute,.second], from: (patient.followUpDate! as Date))
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-        
         let request = UNNotificationRequest(identifier: "Follow up", content: followUpNotification, trigger: trigger)
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
-        do {
-            try managedContext.save()
-        }catch let error as NSError {
-            print("Error saving follow up date \(error) ")
+            do {
+                try managedContext.save()
+            }catch let error as NSError {
+                print("Error saving follow up date \(error) ")
+            }
         }
         
         let patientListViewController = navigationController?.viewControllers[1] as! ListTableViewCellController
