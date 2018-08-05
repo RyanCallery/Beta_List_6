@@ -28,7 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		6816F5C920FD56E900C6886B /* Beta_List_6.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Beta_List_6.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6816F5C920FD56E900C6886B /* Beta_List_AWS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Beta_List_AWS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6816F5CC20FD56E900C6886B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6816F5CE20FD56E900C6886B /* ListTableViewCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewCellController.swift; sourceTree = "<group>"; };
 		6816F5D420FD56E900C6886B /* Beta_List_6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Beta_List_6.xcdatamodel; sourceTree = "<group>"; };
@@ -47,6 +47,7 @@
 		68809D7D210111AA00260113 /* Hcg+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Hcg+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		68809D7E210111AA00260113 /* Ultrasound+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ultrasound+CoreDataClass.swift"; sourceTree = "<group>"; };
 		68809D7F210111AA00260113 /* Ultrasound+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ultrasound+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		6886CF972114BEF20041D535 /* Beta_List_ AWS.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Beta_List_ AWS.xcdatamodel"; sourceTree = "<group>"; };
 		68ADF164210531010040F3AA /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -70,7 +71,7 @@
 				68809D7D210111AA00260113 /* Hcg+CoreDataProperties.swift */,
 				68809D7E210111AA00260113 /* Ultrasound+CoreDataClass.swift */,
 				68809D7F210111AA00260113 /* Ultrasound+CoreDataProperties.swift */,
-				6816F5CB20FD56E900C6886B /* Beta_List_6 */,
+				6816F5CB20FD56E900C6886B /* Beta_List_AWS */,
 				6816F5CA20FD56E900C6886B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -78,12 +79,12 @@
 		6816F5CA20FD56E900C6886B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6816F5C920FD56E900C6886B /* Beta_List_6.app */,
+				6816F5C920FD56E900C6886B /* Beta_List_AWS.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		6816F5CB20FD56E900C6886B /* Beta_List_6 */ = {
+		6816F5CB20FD56E900C6886B /* Beta_List_AWS */ = {
 			isa = PBXGroup;
 			children = (
 				6816F5CC20FD56E900C6886B /* AppDelegate.swift */,
@@ -93,7 +94,7 @@
 				6816F5DB20FD56EA00C6886B /* Info.plist */,
 				6816F5D320FD56E900C6886B /* Beta_List_6.xcdatamodeld */,
 			);
-			path = Beta_List_6;
+			path = Beta_List_AWS;
 			sourceTree = "<group>";
 		};
 		6816F5E120FE2F0800C6886B /* Controllers */ = {
@@ -114,9 +115,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		6816F5C820FD56E900C6886B /* Beta_List_6 */ = {
+		6816F5C820FD56E900C6886B /* Beta_List_AWS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6816F5DE20FD56EA00C6886B /* Build configuration list for PBXNativeTarget "Beta_List_6" */;
+			buildConfigurationList = 6816F5DE20FD56EA00C6886B /* Build configuration list for PBXNativeTarget "Beta_List_AWS" */;
 			buildPhases = (
 				6816F5C520FD56E900C6886B /* Sources */,
 				6816F5C620FD56E900C6886B /* Frameworks */,
@@ -126,9 +127,9 @@
 			);
 			dependencies = (
 			);
-			name = Beta_List_6;
+			name = Beta_List_AWS;
 			productName = Beta_List_6;
-			productReference = 6816F5C920FD56E900C6886B /* Beta_List_6.app */;
+			productReference = 6816F5C920FD56E900C6886B /* Beta_List_AWS.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -146,7 +147,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 6816F5C420FD56E900C6886B /* Build configuration list for PBXProject "Beta_List_6" */;
+			buildConfigurationList = 6816F5C420FD56E900C6886B /* Build configuration list for PBXProject "Beta_List_AWS" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -159,7 +160,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6816F5C820FD56E900C6886B /* Beta_List_6 */,
+				6816F5C820FD56E900C6886B /* Beta_List_AWS */,
 			);
 		};
 /* End PBXProject section */
@@ -334,12 +335,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HZ8Q4D89PS;
-				INFOPLIST_FILE = Beta_List_6/Info.plist;
+				INFOPLIST_FILE = Beta_List_AWS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.whiteboard.UIKit-Survey.Beta-List-6";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.whiteboard.UIKit-Survey.Beta-List-AWS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -352,12 +353,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HZ8Q4D89PS;
-				INFOPLIST_FILE = Beta_List_6/Info.plist;
+				INFOPLIST_FILE = Beta_List_AWS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.whiteboard.UIKit-Survey.Beta-List-6";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.whiteboard.UIKit-Survey.Beta-List-AWS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -367,7 +368,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		6816F5C420FD56E900C6886B /* Build configuration list for PBXProject "Beta_List_6" */ = {
+		6816F5C420FD56E900C6886B /* Build configuration list for PBXProject "Beta_List_AWS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6816F5DC20FD56EA00C6886B /* Debug */,
@@ -376,7 +377,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6816F5DE20FD56EA00C6886B /* Build configuration list for PBXNativeTarget "Beta_List_6" */ = {
+		6816F5DE20FD56EA00C6886B /* Build configuration list for PBXNativeTarget "Beta_List_AWS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6816F5DF20FD56EA00C6886B /* Debug */,
@@ -391,9 +392,10 @@
 		6816F5D320FD56E900C6886B /* Beta_List_6.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				6886CF972114BEF20041D535 /* Beta_List_ AWS.xcdatamodel */,
 				6816F5D420FD56E900C6886B /* Beta_List_6.xcdatamodel */,
 			);
-			currentVersion = 6816F5D420FD56E900C6886B /* Beta_List_6.xcdatamodel */;
+			currentVersion = 6886CF972114BEF20041D535 /* Beta_List_ AWS.xcdatamodel */;
 			path = Beta_List_6.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

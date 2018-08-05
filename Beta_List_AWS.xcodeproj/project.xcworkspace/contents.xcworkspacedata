@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:Beta_List_6.xcodeproj">
+      location = "self:/Users/ryancallery/Beta_List_AWS/Beta_List_AWS.xcodeproj">
    </FileRef>
 </Workspace>
